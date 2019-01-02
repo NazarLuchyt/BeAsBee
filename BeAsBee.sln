@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeAsBee.API", "BeAsBee.API\BeAsBee.API.csproj", "{B030B146-6BA8-45EB-90DE-F9F132C307BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeAsBee.WEB", "BeAsBee.WEB\BeAsBee.WEB.csproj", "{1064F3F3-C9A5-40D9-86DA-918AD85E1827}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B030B146-6BA8-45EB-90DE-F9F132C307BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B030B146-6BA8-45EB-90DE-F9F132C307BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B030B146-6BA8-45EB-90DE-F9F132C307BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B030B146-6BA8-45EB-90DE-F9F132C307BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1064F3F3-C9A5-40D9-86DA-918AD85E1827}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1064F3F3-C9A5-40D9-86DA-918AD85E1827}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1064F3F3-C9A5-40D9-86DA-918AD85E1827}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F2D6F51-1C03-4336-8F6C-3C7449FCC220}
+	EndGlobalSection
+EndGlobal

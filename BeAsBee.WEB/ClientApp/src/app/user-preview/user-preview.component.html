@@ -1,0 +1,8 @@
+<div *ngFor="let item of findedUsers" class="chat_list" style="cursor: pointer;" (click)="createNewChat(item.id)">
+  <div class="chat_people">
+    <div class="chat_img"> <img [src]="defaultImg" alt="sunil"> </div>
+    <div class="chat_ib">
+      <h5>{{item.firstName}} {{item.secondName}}</h5>
+    </div>
+  </div>
+</div>

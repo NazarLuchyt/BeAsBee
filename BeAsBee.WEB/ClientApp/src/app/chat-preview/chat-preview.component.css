@@ -1,0 +1,8 @@
+.last-mesg{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: -webkit-left;
+    width: 94%;
+    margin-left: 0px;
+}

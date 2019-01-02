@@ -1,0 +1,31 @@
+<div class="msg_history scrollbar" id="style-3" #endList>
+  <div class="force-overflow">
+    <ng-container *ngFor="let message of messages">
+      <div *ngIf="user.id!=message.userId; else received">
+        <div class="incoming_msg">
+          <div class="incoming_msg_img"> <img [src]="defaultImg" alt="sunil"> </div>
+          <div class="received_msg">
+            <div class="received_withd_msg">             
+              <p style="word-break: break-all"><b  [ngStyle]="{'color' : setColor(message.userId)}">{{message.userName}}</b><br/>{{message.messageText}}</p>
+              <span class="time_date"> {{message.receivedTime | date:'medium' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #received>
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p style="word-break: break-all">{{message.messageText}}</p>
+            <span class="time_date"> {{message.receivedTime | date:'medium' }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+<div class="type_msg">
+  <div class="input_msg_write" (keydown.enter)="createMessage();">
+    <input [(ngModel)]="inputMessage" type="text" class="write_msg" placeholder="Type a message" />
+    <button (click)="createMessage();" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+  </div>
+</div>
