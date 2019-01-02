@@ -259,3 +259,11 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+
+BeAsBee.API - Copy/**
+BeAsBee.Domain - Copy/**
+BeAsBee.Domain.Services - Copy/**
+BeAsBee.Infrastructure - Copy/**
+BeAsBee.Infrastructure.Sql - Copy/**
+BeAsBee.IoC - Copy/**
