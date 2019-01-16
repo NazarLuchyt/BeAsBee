@@ -138,6 +138,9 @@
   <data name="INNER_EXCEPTION" xml:space="preserve">
     <value>Inner exception:  {0}</value>
   </data>
+  <data name="LOGIN_DOES_NOT_EXIST" xml:space="preserve">
+    <value>This user is not exist.</value>
+  </data>
   <data name="STACK_TRACE" xml:space="preserve">
     <value>Stack trace:  {0}</value>
   </data>

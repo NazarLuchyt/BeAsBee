@@ -1,4 +1,5 @@
 ﻿using System;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 
 namespace BeAsBee.Infrastructure.Sql.Models {
     public class UserChat {

@@ -2,6 +2,7 @@
 using AutoMapper;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Infrastructure.Sql.Models;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace BeAsBee.Infrastructure.Sql {

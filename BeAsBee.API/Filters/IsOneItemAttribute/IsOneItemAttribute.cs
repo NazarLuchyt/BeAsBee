@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Castle.Core.Internal;
 
-namespace JSPWebsite.WebAPI.Filters.IsOneItemAttribute {
+namespace BeAsBee.API.Filters.IsOneItemAttribute {
     public class IsOneItemAttribute : ValidationAttribute {
         private readonly int[] _imageTypes;
         private readonly string _propertyName;

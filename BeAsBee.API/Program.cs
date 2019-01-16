@@ -1,7 +1,9 @@
 ﻿using BeAsBee.API.Areas.v1.Data;
 using BeAsBee.Infrastructure.Sql.Models.Context;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BeAsBee.API {
@@ -11,7 +13,9 @@ namespace BeAsBee.API {
             using ( var scope = host.Services.CreateScope() ) {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationContext>();
-                SeedData.Initialize( context );
+                var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                SeedData.Initialize( context, roleManager, userManager ).Wait();
             }
 
             host.Run();
@@ -24,3 +28,7 @@ namespace BeAsBee.API {
         }
     }
 }
+
+//The INSERT statement conflicted with the FOREIGN KEY constraint "FK_Chats_AspNetUsers_UserId". The conflict occurred in database "BeAsBee", table "dbo.AspNetUsers", column 'Id'.
+//The statement has been terminated.
+//The statement has been terminated.

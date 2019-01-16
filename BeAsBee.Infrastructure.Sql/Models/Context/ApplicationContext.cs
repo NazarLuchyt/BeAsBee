@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeAsBee.Infrastructure.Sql.Models.Context {
-    public class ApplicationContext : DbContext {
+    public class ApplicationContext : IdentityDbContext<User, Role, Guid> {
         public ApplicationContext ( DbContextOptions<ApplicationContext> options )
             : base( options ) {
         }
@@ -21,7 +24,6 @@ namespace BeAsBee.Infrastructure.Sql.Models.Context {
             //modelBuilder.Entity<Vacancy>()
             //    .HasMany(c => c.Contacts)
             //    .WithOne(a => a.Vacancy);
-
 
             //modelBuilder.Entity<CaseStudyImage>()
             //    .HasOne(b => b.CaseStudy)
@@ -45,18 +47,17 @@ namespace BeAsBee.Infrastructure.Sql.Models.Context {
 
             //#endregion
 
-
             modelBuilder.Entity<UserChat>().HasKey( e => new {e.UserId, e.ChatId} );
 
             modelBuilder.Entity<UserChat>()
-                .HasOne(sc => sc.User)
-                .WithMany(s => s.UserChats)
-                .HasForeignKey(sc => sc.UserId);
+                .HasOne( sc => sc.User )
+                .WithMany( s => s.UserChats )
+                .HasForeignKey( sc => sc.UserId );
 
             modelBuilder.Entity<UserChat>()
-                .HasOne(sc => sc.Chat)
-                .WithMany(c => c.UserChats)
-                .HasForeignKey(sc => sc.ChatId);
+                .HasOne( sc => sc.Chat )
+                .WithMany( c => c.UserChats )
+                .HasForeignKey( sc => sc.ChatId );
 
             //modelBuilder.Entity<User>() // User 1 => N UserChats
             //    .HasMany( u => u.UserChats )
@@ -77,20 +78,18 @@ namespace BeAsBee.Infrastructure.Sql.Models.Context {
                 .HasForeignKey( m => m.UserId );
 
             modelBuilder.Entity<User>() //User 1 =>
-                .HasMany(u => u.Chats) //=> N Messages each =>
-                .WithOne(m => m.User) //=> 1 User
-                .HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasMany( u => u.Chats ) //=> N Messages each =>
+                .WithOne( m => m.User ) //=> 1 User
+                .HasForeignKey( m => m.UserId )
+                .OnDelete( DeleteBehavior.SetNull );
 
             modelBuilder.Entity<Chat>() //Chat 1 = > N Messages (Chat has many messages and one message has 1 chat)
                 .HasMany( c => c.Messages )
                 .WithOne( m => m.Chat )
                 .HasForeignKey( m => m.ChatId )
-                .OnDelete(DeleteBehavior.SetNull);
-
+                .OnDelete( DeleteBehavior.SetNull );
 
             // User 1 => N UserChats N => 1 Chat  // how the bridge connection works (users to chats)
-
         }
     }
 }

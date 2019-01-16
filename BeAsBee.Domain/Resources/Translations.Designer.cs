@@ -124,6 +124,15 @@ namespace BeAsBee.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This user is not exist..
+        /// </summary>
+        public static string LOGIN_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("LOGIN_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stack trace:  {0}.
         /// </summary>
         public static string STACK_TRACE {

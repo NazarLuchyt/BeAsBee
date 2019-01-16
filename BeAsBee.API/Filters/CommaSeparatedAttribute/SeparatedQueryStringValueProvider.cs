@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 
-namespace JSPWebsite.WebAPI.Filters.CommaSeparatedAttribute {
+namespace BeAsBee.API.Filters.CommaSeparatedAttribute {
     public class SeparatedQueryStringValueProvider : QueryStringValueProvider {
         private readonly HashSet<string> _keys;
 

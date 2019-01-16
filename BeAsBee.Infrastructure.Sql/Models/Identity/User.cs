@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
-namespace BeAsBee.Infrastructure.Sql.Models {
-    public class User {
-        public Guid Id { get; set; } = Guid.NewGuid();
+namespace BeAsBee.Infrastructure.Sql.Models.Identity {
+    public class User : IdentityUser<Guid> {
         public string FirstName { get; set; }
         public string SecondName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
 
         //Navigation properties
         public virtual List<Chat> Chats { get; set; } = new List<Chat>(); // chats where user is an owner

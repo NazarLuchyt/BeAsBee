@@ -6,11 +6,17 @@ using BeAsBee.Infrastructure.Common;
 
 namespace BeAsBee.Infrastructure.Repositories {
     public interface IUserRepository : IGenericRepository<UserEntity, Guid> {
-        Task<UserEntity> GetByEmail ( string email );
-
         Task<List<UserEntity>> GetPagedAsync ( int count = 10, int page = 0,
                                                string infoToSearch = null );
 
         Task<int> CountAsync ( string infoToSearch = null );
+
+        #region Identity
+
+        Task<UserEntity> FindByNameAsync ( string userName );
+        Task<IList<string>> GetRolesAsync ( UserEntity userModel );
+        Task<bool> CheckPasswordAsync ( string userName, string password );
+
+        #endregion
     }
 }

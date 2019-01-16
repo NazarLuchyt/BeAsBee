@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 
 namespace BeAsBee.Infrastructure.Sql.Models {
     public class Chat {

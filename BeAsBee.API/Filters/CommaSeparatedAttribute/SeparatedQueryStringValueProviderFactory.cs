@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace JSPWebsite.WebAPI.Filters.CommaSeparatedAttribute {
+namespace BeAsBee.API.Filters.CommaSeparatedAttribute {
     public class SeparatedQueryStringValueProviderFactory : IValueProviderFactory {
         private readonly string _separator;
         private HashSet<string> _keys;

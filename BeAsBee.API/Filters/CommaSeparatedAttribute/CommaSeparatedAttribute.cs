@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JSPWebsite.WebAPI.Filters.CommaSeparatedAttribute {
+namespace BeAsBee.API.Filters.CommaSeparatedAttribute {
     [AttributeUsage( AttributeTargets.Parameter )]
     public class CommaSeparatedAttribute : Attribute {
     }

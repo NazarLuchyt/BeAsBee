@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 
 namespace BeAsBee.Infrastructure.Sql.Models {
     public class Message {
         public Guid Id { get; set; } = Guid.NewGuid();
-
-        public string UserName { get; set; }
 
         public Guid? ChatId { get; set; }
         public virtual Chat Chat { get; set; } //Navigation property

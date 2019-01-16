@@ -2,17 +2,21 @@
 using System.Threading.Tasks;
 using BeAsBee.Infrastructure.Repositories;
 using BeAsBee.Infrastructure.Sql.Models.Context;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
 using BeAsBee.Infrastructure.Sql.Repositories;
 using BeAsBee.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeAsBee.Infrastructure.Sql.UnitOfWork {
     public class UnitOfWork : IUnitOfWork {
         private readonly ApplicationContext _context;
 
         private readonly bool _disposed = false;
+        private readonly UserManager<User> _userManager;
 
-        public UnitOfWork ( ApplicationContext context ) {
+        public UnitOfWork ( ApplicationContext context, UserManager<User> userManager ) {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task SaveChangesAsync () {
@@ -43,7 +47,7 @@ namespace BeAsBee.Infrastructure.Sql.UnitOfWork {
         private IUserRepository _userRepository;
 
         public IUserRepository UserRepository {
-            get { return _userRepository = _userRepository ?? new UserRepository( _context ); }
+            get { return _userRepository = _userRepository ?? new UserRepository( _context, _userManager ); }
         }
 
         private IChatRepository _chatRepository;
