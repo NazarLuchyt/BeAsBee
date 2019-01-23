@@ -1,0 +1,16 @@
+<form #loginForm="ngForm" (ngSubmit)="login()" novalidate>
+    <div class="form-group">
+        <label>{{'LABEL.LOGIN.TEXT_LOGIN' | translate}}</label>
+        <input class="form-control" name="email" [(ngModel)]="model.email" required />
+    </div>
+    <div class="form-group">
+        <label>{{'LABEL.LOGIN.TEXT_PASSWORD' | translate}}</label>
+        <input class="form-control" name="password" [(ngModel)]="model.password" required />
+    </div>
+    <div class="form-group">
+        <button [disabled]="loginForm.invalid" class="btn btn-default">{{'LABEL.LOGIN.TEXT_SIGN_IN' | translate}}</button>
+    </div>
+</form>
+<div>
+    <p>Error: {{error}}</p>
+</div>

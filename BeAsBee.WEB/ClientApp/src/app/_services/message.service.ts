@@ -11,7 +11,7 @@ export class MessageService {
   constructor(private service: ApiService) { }
 
   public getAll() {
-    return this.service.getAll<Array<Message>>("api/v1/messages");
+    return this.service.getAll<Array<Message>>('api/v1/messages');
   }
 
   // public getPage(page: number, count?: number) {
@@ -19,18 +19,18 @@ export class MessageService {
   // }
 
   public getByChatId(id: string) {
-    return this.service.getById<Array<Message>>("api/v1/messages/", id);
+    return this.service.getById<Array<Message>>('api/v1/messages/', id);
   }
 
   public create(model: MessageCreate) {
-    return this.service.post<any>("api/v1/messages", model);
+    return this.service.post<any>('api/v1/messages', model);
   }
 
   public update(message: Message) {
-    return this.service.put<Message>("api/v1/messages", message);
+    return this.service.put<Message>('api/v1/messages', message);
   }
 
   public delete(id: string) {
-    return this.service.delete<Message>("api/v1/messages", id);
+    return this.service.delete<Message>('api/v1/messages', id);
   }
 }

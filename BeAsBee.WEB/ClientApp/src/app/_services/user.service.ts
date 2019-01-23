@@ -4,7 +4,6 @@ import { ApiService } from './api.services';
 import { User } from '../_models/user.model';
 import { UserPage } from '../_models/user-page.model';
 import { UserViewTypeEnum } from '../_models/enums/user-view-type.enum';
-import { template } from '@angular/core/src/render3';
 import { HttpParam } from '../_models/http-param.model';
 import { Page } from '../_models/page.model';
 

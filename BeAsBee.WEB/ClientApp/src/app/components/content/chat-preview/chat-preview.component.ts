@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Chat } from '../_models/chat.model';
-import { defaultImg } from '../_constants/defaults.const';
-import { ChatHub } from '../_hubs/chats.hub';
-import { Message } from '../_models/message.model';
-import { MessageCreate } from '../_models/message-create.model';
+import { ChatHub } from 'src/app/_hubs/chats.hub';
+import { defaultImg } from 'src/app/_constants/defaults.const';
+import { Chat } from 'src/app/_models/chat.model';
+import { MessageCreate } from 'src/app/_models/message-create.model';
+import { Message } from 'src/app/_models/message.model';
+
 
 @Component({
   selector: 'app-chat-preview',
   providers: [ChatHub],
   templateUrl: './chat-preview.component.html',
-  styleUrls: ['./chat-preview.component.css']
+  styleUrls: ['./chat-preview.component.scss']
 })
 
 export class ChatPreviewComponent implements OnInit, OnDestroy {

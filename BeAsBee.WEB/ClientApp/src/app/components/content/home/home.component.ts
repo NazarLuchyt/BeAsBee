@@ -1,20 +1,20 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { UserService } from '../_services/user.service';
-import { UserViewTypeEnum } from '../_models/enums/user-view-type.enum';
-import { UserPage } from '../_models/user-page.model';
-import { ChatService } from '../_services/chat.service';
-import { Chat } from '../_models/chat.model';
-import { Message } from '../_models/message.model';
-import { ChatHub } from '../_hubs/chats.hub';
-import { MessageCreate } from '../_models/message-create.model';
 import { ChatPreviewComponent } from '../chat-preview/chat-preview.component';
 import { ChatComponent } from '../chat/chat.component';
+import { ChatHub } from 'src/app/_hubs/chats.hub';
+import { UserPage } from 'src/app/_models/user-page.model';
+import { Chat } from 'src/app/_models/chat.model';
+import { UserService } from 'src/app/_services/user.service';
+import { ChatService } from 'src/app/_services/chat.service';
+import { MessageCreate } from 'src/app/_models/message-create.model';
+import { UserViewTypeEnum } from 'src/app/_models/enums/user-view-type.enum';
+import { Message } from 'src/app/_models/message.model';
 
 @Component({
   selector: 'app-home',
   providers: [ChatHub],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 
 export class HomeComponent implements OnInit {

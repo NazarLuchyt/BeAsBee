@@ -1,16 +1,17 @@
-import { Input, Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { Message } from '../_models/message.model';
-import { defaultImg } from '../_constants/defaults.const';
-import { UserPage } from '../_models/user-page.model';
-import { MessageCreate } from '../_models/message-create.model';
+import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
-import { ChatService } from '../_services/chat.service';
-import { Chat } from '../_models/chat.model';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { defaultImg } from 'src/app/_constants/defaults.const';
+import { UserPage } from 'src/app/_models/user-page.model';
+import { Chat } from 'src/app/_models/chat.model';
+import { MessageCreate } from 'src/app/_models/message-create.model';
+import { ChatService } from 'src/app/_services/chat.service';
+
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.scss']
 })
 
 export class ChatComponent implements OnInit {

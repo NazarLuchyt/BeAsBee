@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { UserCreate } from '../_models/user-create.model';
+import { UserCreate } from 'src/app/_models/user-create.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
+
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css']
+  styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
   error: any;

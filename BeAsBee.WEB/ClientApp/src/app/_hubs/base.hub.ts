@@ -1,5 +1,5 @@
 import { Inject } from '@angular/core/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { ApiService } from './api.services';
 import { Authentication } from '../_models/authentication';
 import { UserCreate } from '../_models/user-create.model';

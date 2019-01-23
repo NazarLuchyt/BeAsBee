@@ -1,5 +1,5 @@
-import { ChatList } from "./chat-list.model";
 import { Chat } from './chat.model';
+
 
 export class UserPage {
     id: string;

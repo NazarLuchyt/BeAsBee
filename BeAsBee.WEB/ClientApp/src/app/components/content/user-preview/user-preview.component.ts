@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserPage } from '../_models/user-page.model';
-import { defaultImg } from '../_constants/defaults.const';
+import { UserPage } from 'src/app/_models/user-page.model';
+import { defaultImg } from 'src/app/_constants/defaults.const';
+
 
 @Component({
   selector: 'app-user-preview',
   templateUrl: './user-preview.component.html',
-  styleUrls: ['./user-preview.component.css']
+  styleUrls: ['./user-preview.component.scss']
 })
 export class UserPreviewComponent implements OnInit {
   defaultImg = defaultImg;

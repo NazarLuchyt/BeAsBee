@@ -1,0 +1,9 @@
+{
+    "LABEL": {
+        "LOGIN": {
+            "TEXT_LOGIN": "Login",
+            "TEXT_SIGN_IN": "Sign In",
+            "TEXT_PASSWORD": "Password"
+        }
+    }
+}
