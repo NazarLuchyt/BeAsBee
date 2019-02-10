@@ -3,7 +3,14 @@
         "LOGIN": {
             "TEXT_LOGIN": "Login",
             "TEXT_SIGN_IN": "Sign In",
-            "TEXT_PASSWORD": "Password"
+            "TEXT_PASSWORD": "Password",
+            "TEXT_LOG_OUT": "Log out"
+        }
+    },
+    "MESSAGE": {
+        "LOGIN": {
+            "ERROR_USERNAME_REQUIRED": "Please enter user name. This field is required!",
+            "ERROR_PASSWORD_REQUIRED": "Please enter password. This field is required!"
         }
     }
 }

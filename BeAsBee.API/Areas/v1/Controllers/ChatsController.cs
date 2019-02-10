@@ -43,7 +43,6 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         /// <param name="userId">User id to filtered chats.</param>
         /// <param name="countMessage">Number of message for the first load.</param>
         [HttpGet]
-        [AuthorizeRoles( RoleType.User, RoleType.Admin )]
         public async Task<IActionResult> GetPage ( [FromQuery] Guid userId, [FromQuery] int countMessage, [FromQuery] int count, [FromQuery] int page ) {
             if ( count == 0 ) {
                 throw new ArgumentException( Translations.COUNT_CANNOT_BE_NULL );

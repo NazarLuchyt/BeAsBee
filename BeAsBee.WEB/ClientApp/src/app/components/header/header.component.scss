@@ -1,6 +1,15 @@
 @import 'src/assets/styles/variable.scss';
-
 .main-header {
-    text-align: left;
     background-color: $base-backround-color;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.log-out {
+    cursor: pointer;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Authentication } from 'src/app/_models/authentication';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
@@ -13,12 +13,12 @@ export class LoginComponent implements OnInit {
   model: Authentication = new Authentication();
   loading = false;
   returnUrl: string;
+  isLogInSubmitted = false;
+  isValidModel = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService
-  ) {
+  constructor(private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService) {
+    this.model.password = 'test2';
+    //  this.model.userName = 'test2';
   }
 
   ngOnInit() {
@@ -26,16 +26,18 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authenticationService.login(this.model)
-      .subscribe(
-        result => {
-          localStorage.setItem('currentUserId', result.id);
-          this.router.navigate(['/home']);
-        },
-        response => {
-          this.error = response.error.message;
-        }
+    this.isLogInSubmitted = true;
+    if (this.isValidModel) {
+      this.authenticationService.login(this.model)
+        .subscribe(
+          result => {
+            this.router.navigate(['/home']);
+          },
+          error => {
+            this.error = error.error.message;
+          }
 
-      );
+        );
+    }
   }
 }

@@ -33,8 +33,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.isSearch = false;
-    const id = localStorage.getItem('currentUserId');
-
+    const id = localStorage.getItem('currentUserGuid');
     this.chatService.getPage(id, 5, 0, 10).subscribe((result) => {
       this.usersChats = result.items;
       this.setChats(id, this.usersChats);

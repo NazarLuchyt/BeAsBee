@@ -8,6 +8,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 // Components
 import { AuthoriseComponent } from './components/authorization/authorise/authorise.component';
 import { LoginComponent } from './components/authorization/login/login.component';
@@ -20,18 +21,14 @@ import { ChatPreviewComponent } from './components/content/chat-preview/chat-pre
 import { RegistrationComponent } from './components/authorization/registration/registration.component';
 import { UserPreviewComponent } from './components/content/user-preview/user-preview.component';
 
+import { AuthGuard } from './_guard/auth.guard';
+import { routing } from './app.routing';
+
 // Services
 import { ApiService } from './_services/api.services';
 import { AuthenticationService } from './_services/authentication.service';
-import { HomeGuard } from './_guard/home.guard';
+import { JwtInterceptor } from './_services/jwt.interceptor';
 
-
-
-const appRoutes: Routes = [
-  { path: '', component: AuthoriseComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [HomeGuard] }
-];
 
 @NgModule({
   declarations: [
@@ -48,7 +45,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes),
+    routing,
     TabsModule.forRoot(),
     TranslateModule.forRoot(
       {
@@ -64,9 +61,18 @@ const appRoutes: Routes = [
   ],
 
   providers: [
+    // services
     ApiService,
     AuthenticationService,
-    HomeGuard,
+
+    // Guards
+    AuthGuard,
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
