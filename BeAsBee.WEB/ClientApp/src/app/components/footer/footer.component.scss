@@ -1,4 +1,9 @@
+@import 'src/assets/styles/variable.scss';
 .main-footer{
-    text-align: center;
-    border: 1px solid black;  
+    text-align: center;   
+    background-color: $base-backround-color;   
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    padding: 5px 0px 10px 0px;
 }

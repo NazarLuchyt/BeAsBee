@@ -17,6 +17,7 @@ namespace BeAsBee.Domain.Interfaces.Services {
         Task<UserEntity> FindByNameAsync ( string userName );
         Task<IList<string>> GetRolesAsync ( UserEntity userModel );
         Task<bool> CheckPasswordAsync ( string userName, string password );
+        Task<OperationResult> CreateAsync ( UserEntity userModel, string password );
 
         #endregion
     }

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { UserCreate } from 'src/app/_models/user-create.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { AuthenticationService } from 'src/app/_services/authentication.service'
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  error: any;
+  errors: any;
   model: UserCreate = new UserCreate();
   loading = false;
   returnUrl: string;
@@ -20,20 +21,22 @@ export class RegistrationComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService) { }
 
-  ngOnInit() {
-   // this.authenticationService.logout();
-  }
-  registration() {
-    this.authenticationService.register(this.model)
-      .subscribe(
-        result => {
-          localStorage.setItem('currentUserId', result.id);
-          this.router.navigate(['/home']);
-        },
-        response => {
-          this.error = response.error.message;
-        }
 
-      );
+  @ViewChild('registrForm') registrForm: FormGroup;
+
+  ngOnInit() { }
+
+  registration() {
+    if (this.registrForm.valid) {
+      this.authenticationService.register(this.model)
+        .subscribe(
+          result => {
+            this.router.navigate(['/login']);
+          },
+          response => {
+            this.errors = response.error;
+          }
+        );
+    }
   }
 }

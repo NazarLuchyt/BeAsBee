@@ -13,6 +13,7 @@ namespace BeAsBee.API.Areas.v1 {
 
             CreateMap<CreateMessageBindingModel, MessageEntity>();
             CreateMap<CreateUserBindingModel, UserEntity>();
+            CreateMap<CreateChatBindingModel, ChatEntity>();
 
             #endregion
 

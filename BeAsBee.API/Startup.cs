@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
@@ -28,6 +29,8 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace BeAsBee.API {
     public class Startup {
+        private const string TOKEN = "token";
+
         public Startup ( IConfiguration configuration ) {
             Configuration = configuration;
         }
@@ -36,10 +39,9 @@ namespace BeAsBee.API {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices ( IServiceCollection services ) {
-            
             #region CORS
 
-             services.AddCors( options => {
+            services.AddCors( options => {
                 options.AddPolicy( "CorsPolicy",
                     builder => builder
                         .WithOrigins( "http://localhost:6321" )
@@ -68,17 +70,17 @@ namespace BeAsBee.API {
             #region Auth
 
             services.AddSingleton<IJwtService, JwtService>();
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            var jwtAppSettingOptions = Configuration.GetSection( nameof(JwtIssuerOptions) );
 
-            var _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["SecretKey"]));
-            services.Configure<JwtIssuerOptions>(options => {
+            var _signingKey = new SymmetricSecurityKey( Encoding.ASCII.GetBytes( Configuration["SecretKey"] ) );
+            services.Configure<JwtIssuerOptions>( options => {
                 options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-            });
+                options.SigningCredentials = new SigningCredentials( _signingKey, SecurityAlgorithms.HmacSha256 );
+            } );
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
+            services.AddAuthentication( JwtBearerDefaults.AuthenticationScheme )
+                .AddJwtBearer( options => {
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuer = true,
@@ -89,22 +91,30 @@ namespace BeAsBee.API {
                         IssuerSigningKey = _signingKey,
                         ValidateIssuerSigningKey = true
                     };
-                });
+                    options.Events = new JwtBearerEvents {
+                        OnMessageReceived = context => {
+                            if ( context.Request.Query.ContainsKey( TOKEN ) ) {
+                                context.Token = context.Request.Query[TOKEN];
+                            }
 
-            services.AddIdentity<User, Role>(options => {
-                options.User.RequireUniqueEmail = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 4;
-                options.Password.RequireNonAlphanumeric = false;
-            })
-                 .AddEntityFrameworkStores<ApplicationContext>()
-                  .AddDefaultTokenProviders();
+                            return Task.CompletedTask;
+                        }
+                    };
+                } );
+
+            services.AddIdentity<User, Role>( options => {
+                    options.User.RequireUniqueEmail = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireNonAlphanumeric = false;
+                } )
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+
             #endregion
 
             services.AddDataProtection();
-
-
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen( cfg => {
@@ -119,7 +129,6 @@ namespace BeAsBee.API {
                 var xmlPath = Path.Combine( AppContext.BaseDirectory, xmlFile );
                 cfg.IncludeXmlComments( xmlPath );
             } );
-
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutofac();
@@ -152,7 +161,7 @@ namespace BeAsBee.API {
                     "{controller=Home}/{action=Index}/{id?}" );
             } );
 
-            UpdateDatabase(app);
+            UpdateDatabase( app );
         }
 
         private static void UpdateDatabase ( IApplicationBuilder app ) {

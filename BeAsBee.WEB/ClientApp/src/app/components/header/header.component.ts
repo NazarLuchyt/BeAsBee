@@ -9,9 +9,14 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
+  isAuth: boolean;
+
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
+    this.authenticationService.isLogged.subscribe(result => {
+      this.isAuth = result;
+    });
   }
 
   logOut() {

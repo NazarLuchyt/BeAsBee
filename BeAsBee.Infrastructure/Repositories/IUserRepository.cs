@@ -16,6 +16,7 @@ namespace BeAsBee.Infrastructure.Repositories {
         Task<UserEntity> FindByNameAsync ( string userName );
         Task<IList<string>> GetRolesAsync ( UserEntity userModel );
         Task<bool> CheckPasswordAsync ( string userName, string password );
+        Task<bool> CreateAsync ( UserEntity userModel, string password );
 
         #endregion
     }

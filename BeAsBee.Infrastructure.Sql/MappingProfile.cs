@@ -3,7 +3,6 @@ using AutoMapper;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Infrastructure.Sql.Models;
 using BeAsBee.Infrastructure.Sql.Models.Identity;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace BeAsBee.Infrastructure.Sql {
     public class MappingProfile : Profile {
@@ -12,15 +11,16 @@ namespace BeAsBee.Infrastructure.Sql {
 
             CreateMap<Chat, ChatEntity>()
                 .ForMember( dto => dto.UserChats, opt =>
-                    opt.MapFrom( c => c.UserChats.Select( userChat => userChat.User).Select( u => new UserEntity {
+                    opt.MapFrom( c => c.UserChats.Select( userChat => userChat.User ).Select( u => new UserEntity {
                         FirstName = u.FirstName,
                         SecondName = u.SecondName,
                         Id = u.Id
-                    } ).ToList())).MaxDepth(1);
+                    } ).ToList() ) ).MaxDepth( 1 );
             CreateMap<User, UserEntity>()
                 .ForMember( dto => dto.UserChats, opt =>
                     opt.MapFrom( c => c.UserChats.Select( userChat => userChat.Chat ).ToList() ) ).MaxDepth( 1 );
-            CreateMap<Message, MessageEntity>();
+            CreateMap<Message, MessageEntity>()
+                .ForMember( dto => dto.UserName, opt => opt.MapFrom( msg => msg.User.FirstName + " " + msg.User.SecondName ) );
 
             //CreateMap<Industry, IndustryEntity>();
             //CreateMap<Expertise, ExpertiseEntity>();
@@ -35,17 +35,14 @@ namespace BeAsBee.Infrastructure.Sql {
             #region Domain -> Entity
 
             CreateMap<UserEntity, User>()
-                .ForMember(c => c.Chats,
-                    opt => opt.MapFrom(dto => dto.Chats.Select(s => new Chat { Id = s.Id })))
-                .ForMember(c => c.UserChats,
-                    opt => opt.MapFrom(dto => dto.UserChats.Select(s => new UserChat { ChatId = s.Id })));
+                .ForMember( c => c.Chats,
+                    opt => opt.MapFrom( dto => dto.Chats.Select( s => new Chat {Id = s.Id} ) ) )
+                .ForMember( c => c.UserChats,
+                    opt => opt.MapFrom( dto => dto.UserChats.Select( s => new UserChat {ChatId = s.Id} ) ) );
             CreateMap<MessageEntity, Message>();
             CreateMap<ChatEntity, Chat>()
                 .ForMember( c => c.UserChats,
                     opt => opt.MapFrom( dto => dto.UserChats.Select( user => new UserChat {UserId = user.Id} ) ) );
-
-
-
 
             //CreateMap<ContactEntity, Contact>()
             //     .ForMember(x => x.AttachedFiles, o => o.MapFrom(a => a.AttachedFiles));

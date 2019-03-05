@@ -5,18 +5,27 @@ import { UserCreate } from '../_models/user-create.model';
 import { map } from 'rxjs/operators';
 import * as decode from 'jwt-decode';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
   private currentUser: any;
   private jwtHelper: JwtHelperService;
 
+  isLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   constructor(private service: ApiService) {
     this.jwtHelper = new JwtHelperService();
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  changeIsLogged(status: boolean) {
+    this.isLogged.next(status);
   }
 
   isAuthenticated(): boolean {
     if (!this.currentUser) {
+      this.isLogged.next(false);
       return false;
     }
     const token = this.currentUser.token;
@@ -24,12 +33,13 @@ export class AuthenticationService {
     if (!result) {
       localStorage.removeItem('currentUser');
     }
+    this.isLogged.next(result);
     return result;
   }
 
 
   public register(register: UserCreate) {
-    return this.service.post<any>('api/v1/Account/registration', register);
+    return this.service.post<any>('api/v1/Accounts/registration', register);
     // .subscribe(
     //   result => {
     //     localStorage.setItem('currentUser', result.id);
@@ -51,6 +61,7 @@ export class AuthenticationService {
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('currentUserGuid', decode(user.token).sub);
             this.currentUser = user;
+            this.changeIsLogged(true);
           }
           return user;
         }));
@@ -64,6 +75,7 @@ export class AuthenticationService {
     localStorage.removeItem('currentUserGuid');
     localStorage.removeItem('currentUser');
     this.currentUser = null;
+    this.changeIsLogged(false);
   }
 }
 

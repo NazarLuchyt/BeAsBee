@@ -28,6 +28,9 @@ import { routing } from './app.routing';
 import { ApiService } from './_services/api.services';
 import { AuthenticationService } from './_services/authentication.service';
 import { JwtInterceptor } from './_services/jwt.interceptor';
+import { MessageStoreService } from './_services/message.store.service';
+import { ChatService } from './_services/chat.service';
+import { MessageComponent } from './components/content/message/message.component';
 
 
 @NgModule({
@@ -41,7 +44,8 @@ import { JwtInterceptor } from './_services/jwt.interceptor';
     ChatComponent,
     ChatPreviewComponent,
     RegistrationComponent,
-    UserPreviewComponent
+    UserPreviewComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +68,8 @@ import { JwtInterceptor } from './_services/jwt.interceptor';
     // services
     ApiService,
     AuthenticationService,
+    MessageStoreService,
+    ChatService,
 
     // Guards
     AuthGuard,

@@ -5,12 +5,12 @@ export class UserPage {
     id: string;
     firstName: string;
     secondName: string;
-    usersChats: Chat[];
+    userChats: Chat[];
 
-    constructor(id: string, firstName?: string, secondName?: string, usersChats?: Chat[]) {
+    constructor(id?: string, firstName?: string, secondName?: string, userChats?: Chat[]) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.usersChats = usersChats;
+        this.userChats = userChats;
     }
 }

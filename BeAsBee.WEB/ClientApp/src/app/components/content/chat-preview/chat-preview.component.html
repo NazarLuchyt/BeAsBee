@@ -1,7 +1,7 @@
-<div class="chat_people" (click)="setChat(chat)">
+<div class="chat_people" (click)="getChat()">
   <div class="chat_img"> <img [src]="defaultImg" alt="sunil"> </div>
   <div class="chat_ib">
-    <h5>{{chat?.name}} <span class="chat_date"> {{chat?.messages[chat?.messages?.length - 1].receivedTime | date:'MMM d' }}</span></h5>
-    <p class="last-mesg">{{chat?.messages[chat?.messages?.length - 1].messageText}}</p>
+    <h5>{{chatItem?.name}} <span class="chat_date"> {{lastMessage?.receivedTime | date:'MMM d' }}</span></h5>
+    <p class="last-mesg">{{lastMessage?.messageText}}</p>
   </div>
 </div>

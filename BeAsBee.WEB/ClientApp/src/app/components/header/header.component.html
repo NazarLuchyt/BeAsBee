@@ -1,4 +1,5 @@
 <header class="main-header flex-container">
-    <span>Be As Bee Corporation</span>
-    <div class="log-out" (click)="logOut()">{{'LABEL.LOGIN.TEXT_LOG_OUT' | translate}}</div>
+    <img src="../../../assets/img/Header_Bee2.jpg" class="header-img">  
+    <!-- <img src="../../../assets/img/log_out.jpg" class="header-img"> -->
+    <div *ngIf="isAuth" class="log-out ml-auto" (click)="logOut()">{{'LABEL.LOGIN.TEXT_LOG_OUT' | translate}}</div>
 </header>

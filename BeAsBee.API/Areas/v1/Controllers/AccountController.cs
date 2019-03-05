@@ -16,55 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace BeAsBee.API.Areas.v1.Controllers {
-    //[Produces( "application/json" )]
-    //[Route( "api/v1/[controller]" )]
-    //public class AccountController : BaseController {
-    //    private readonly IUserService _userService;
-
-    //    public AccountController ( IUserService userService, IMapper mapper ) : base( mapper ) {
-    //        _userService = userService;
-    //    }
-
-    //    /// <summary>
-    //    ///     Post case study entity by id.
-    //    /// </summary>
-    //    /// <remarks>This route will get entity.</remarks>
-    //    /// <param name="model">Login model.</param>
-    //    [HttpPost]
-    //    [Route( "login" )]
-    //    public async Task<IActionResult> Login ( [FromBody] LoginBindingModel model ) {
-    //        var result = await _userService.GetByEmail( model.Email, model.Password );
-    //        if ( result == null ) {
-    //            throw new ItemNotFoundException( "Email or password is incorrect!" );
-    //        }
-
-    //        var viewModel = _mapper.Map<UserViewModel>( result );
-    //        return Ok( viewModel );
-    //    }
-
-    //    /// <summary>
-    //    ///     Create new user.
-    //    /// </summary>
-    //    /// <remarks>This route will create entity.</remarks>
-    //    /// <param name="model">Registration model.</param>
-    //    [HttpPost]
-    //    [HttpPost]
-    //    [Route( "registration" )]
-    //    public async Task<IActionResult> Registration ( [FromBody] CreateUserBindingModel model ) {
-    //        if ( !ModelState.IsValid ) {
-    //            return BadRequest( ModelState );
-    //        }
-
-    //        var modelEntity = _mapper.Map<UserEntity>( model );
-    //        var result = await _userService.CreateAsync( modelEntity );
-    //        if ( !result.IsSuccess ) {
-    //            throw result.Exception;
-    //        }
-
-    //        var viewModel = _mapper.Map<UserViewModel>( result.Value );
-    //        return Ok( viewModel );
-    //    }
-    //}
     [Produces( "application/json" )]
     [Route( "api/v1/accounts" )]
     public class AccountsController : BaseController {
@@ -95,7 +46,9 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             var role = await GetUserRole( user );
             var response = new {
                 Token = await _jwtFactory.GenerateEncodedToken( user.Id.ToString(), identity, role.ToString() ),
-                Role = role
+                Role = role,
+                UserFirstName = user.FirstName,
+                UserSecondName = user.SecondName
             };
             return Ok( response );
         }
@@ -123,6 +76,75 @@ namespace BeAsBee.API.Areas.v1.Controllers {
 
             return await Task.FromResult<ClaimsIdentity>( null );
         }
+
+        /// <summary>
+        ///     Create new user.
+        /// </summary>
+        /// <remarks>This route will create entity.</remarks>
+        /// <param name="model">Registration model.</param>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route( "registration" )]
+        public async Task<IActionResult> Registration ( [FromBody] CreateUserBindingModel model ) {
+            if ( await _userService.FindByNameAsync( model.UserName ) != null ) {
+                ModelState.AddModelError( "UserName", Translations.EMAIL_ALREADY_EXIST );
+            }
+
+            if ( !ModelState.IsValid ) {
+                return BadRequest( ModelState );
+            }
+
+            var modelEntity = _mapper.Map<UserEntity>( model );
+            var result = await _userService.CreateAsync( modelEntity, model.Password );
+            if ( !result.IsSuccess ) {
+                var errList = "";
+                var error = result.Exception.Message.Split( "|" ).ToList();
+
+                foreach ( var err in error ) {
+                    if ( !string.IsNullOrEmpty( err ) ) {
+                        ModelState.AddModelError( "Password", err );
+                    }
+                }
+                return BadRequest( ModelState );
+            }
+
+            return Ok();
+        }
+
+        //// PUT api/values/5
+        //[HttpPost]
+        //[Route( "register" )]
+        //public async Task<IActionResult> Register ( [FromBody] RegisterBindingModel model ) {
+        //    if ( !ModelState.IsValid ) { return BadRequest( "Could not create token" ); }
+
+        //    if ( await _unitOfWork.UserManager.FindByNameAsync( model.Email ) != null ) {
+        //        ModelState.AddModelError( "Email", "ERR_USER_ALREADY_EXISTS" );
+        //    } else {
+        //        var user = new User {UserName = model.Email, Email = model.Email, LastName = model.LastName, Name = model.Name, GenderType = model.Gender};
+        //        var result = await _unitOfWork.UserManager.CreateAsync( user, model.Password );
+        //        if ( !result.Succeeded ) { return BadRequest( "Could not create token" ); }
+
+        //        var claims = new[] {
+        //            new Claim( ClaimsIdentity.DefaultNameClaimType, user.UserName ),
+        //            new Claim( JwtRegisteredClaimNames.Sub, user.Email ),
+        //            new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString() ),
+        //            new Claim( JwtRegisteredClaimNames.Sid, user.Id ) // Set userid to token Sid claim
+        //        };
+
+        //        var key = new SymmetricSecurityKey( Encoding.UTF8.GetBytes( _options.Value.Key ) );
+        //        var creds = new SigningCredentials( key, SecurityAlgorithms.HmacSha256 );
+
+        //        var token = new JwtSecurityToken( _options.Value.Issuer,
+        //            _options.Value.Issuer,
+        //            claims,
+        //            expires: DateTime.Now.AddMinutes( 30 ),
+        //            signingCredentials: creds );
+
+        //        return Ok( new {token = new JwtSecurityTokenHandler().WriteToken( token ), id = user.Id} );
+        //    }
+
+        //    return BadRequest( "Could not create token" );
+        //}
 
         //[AllowAnonymous]
         //[HttpPut("change-password")]

@@ -1,4 +1,4 @@
-<div *ngFor="let item of findedUsers" class="chat_list" style="cursor: pointer;" (click)="createNewChat(item.id)">
+<div *ngFor="let item of findedUsers" class="chat_list" style="cursor: pointer;" (click)="createNewChat(item)">
   <div class="chat_people">
     <div class="chat_img"> <img [src]="defaultImg" alt="sunil"> </div>
     <div class="chat_ib">

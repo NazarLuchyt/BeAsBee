@@ -28,7 +28,7 @@ namespace BeAsBee.Infrastructure.Sql.Repositories {
 
         public async Task<List<UserEntity>> GetPagedAsync ( int count = 10, int page = 0,
                                                             string infoToSearch = null ) {
-            var result = await GetAsync( new List<Expression<Func<User, bool>>> {user => (user.FirstName + " " + user.SecondName).Contains( infoToSearch )} )
+            var result = await GetAsync( new List<Expression<Func<User, bool>>> {user => (user.FirstName + " " + user.SecondName).Contains( infoToSearch ) || user.UserName.Contains( infoToSearch )} )
                 .Skip( page * count ).Take( count )
                 .ToListAsync();
             return Mapper.Map<List<UserEntity>>( result );
@@ -64,6 +64,19 @@ namespace BeAsBee.Infrastructure.Sql.Repositories {
 
             var result = await _userManager.CheckPasswordAsync( user, password );
             return result;
+        }
+
+        public async Task<bool> CreateAsync ( UserEntity userModel, string password ) {
+            var userToCreate = Mapper.Map<User>( userModel );
+            var result = await _userManager.CreateAsync( userToCreate, password );
+            var errors = result.Errors.Aggregate( "", ( current, identityError ) => current + identityError.Description + "|" );
+            if ( !result.Succeeded ) {
+                throw new Exception( errors );
+            }
+
+            await _userManager.AddToRoleAsync( userToCreate, "User" );
+
+            return result.Succeeded;
         }
 
         #endregion

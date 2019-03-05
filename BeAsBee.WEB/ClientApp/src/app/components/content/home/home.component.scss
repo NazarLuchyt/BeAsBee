@@ -1,0 +1,25 @@
+.main-container {
+    margin: 10px;
+}
+
+.inbox_people {
+    background: #f8f8f8 none repeat scroll 0 0;
+    float: left;
+    overflow: hidden;
+    width: 35%;
+    border-right: 1px solid #c4c4c4;
+}
+
+.mesgs {
+    float: left;
+    padding: 30px 5px 0 25px;
+    width: 65%;
+}
+
+.clear {
+    display: flex;
+}
+
+.clear-button {
+    margin: auto;
+}

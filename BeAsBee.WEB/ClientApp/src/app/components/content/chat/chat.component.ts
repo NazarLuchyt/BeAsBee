@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { defaultImg } from 'src/app/_constants/defaults.const';
 import { UserPage } from 'src/app/_models/user-page.model';
 import { Chat } from 'src/app/_models/chat.model';
 import { MessageCreate } from 'src/app/_models/message-create.model';
 import { ChatService } from 'src/app/_services/chat.service';
-
+import { Message } from 'src/app/_models/message.model';
+import { MessageStoreService } from 'src/app/_services/message.store.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -19,32 +20,26 @@ export class ChatComponent implements OnInit {
   defaultColor: string[] = ['#c44242', '#5119c5', '#0f9497', '#3b7919'];
   hubConnection: HubConnection;
   messages: Message[];
-  defaultImg = defaultImg;
+
+  storeSubscription: Subscription;
+  messageStore: MessageStoreService;
+
   chatId: string;
-  user: UserPage;
   inputMessage: string;
   currentChat: Chat;
 
   @ViewChild('endList') private endList: ElementRef;
+  @ViewChild('input_field') private inputField: ElementRef;
 
-  @Output() createdMessage = new EventEmitter<MessageCreate>();
+  constructor(private chatService: ChatService) { }
 
-  @Input()
-  set setMessages(messages: Message[]) {
-    this.messages = messages;
-  }
-  get setMessages() { return this.messages; }
-
-  @Input()
-  set setChatId(id: string) {
-    this.chatId = id;
-    this.chatService.getById(this.chatId).subscribe(result => {
-      this.currentChat = result;
-      let i = 0;
-      this.currentChat.userChats.forEach(user => {
-        this.colorArray[i] = [user.id, this.defaultColor[i]];
-        i++;
-      });
+  ngOnInit() {
+    this.chatService.currentMessageStore.subscribe(msgStore => {
+      if (msgStore) {
+        this.messageStore = msgStore;
+        this.changeMessageStore(msgStore);
+        this.scrollToBottom();
+      }
     });
   }
 
@@ -52,19 +47,13 @@ export class ChatComponent implements OnInit {
     return this.colorArray.find(p => p[0] === userId)[1];
   }
 
-  get setChatId() { return this.chatId; }
-
-  @Input()
-  set setUser(user: UserPage) {
-    this.user = user;
-    if (user) {
+  changeMessageStore(msgStore: MessageStoreService) {
+    if (this.storeSubscription) {
+      this.storeSubscription.unsubscribe();
     }
-  }
-  get setUser() { return this.user; }
-
-  constructor(private chatService: ChatService) { }
-
-  ngOnInit() {
+    this.storeSubscription = msgStore.store.subscribe(messages => {
+      this.messages = messages;
+    });
   }
 
   scrollToBottom() {
@@ -73,16 +62,15 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  public createMessage(): void {
-    const newMessage = new MessageCreate(
-      this.chatId,
-      new Date(),
-      this.inputMessage,
-      this.user.id,
-      this.user.firstName + ' ' + this.user.secondName);
-
-    this.createdMessage.emit(newMessage); // send message to parent component
-
-    this.inputMessage = '';
+  public createMessage(event: Event): void {
+    if (this.inputMessage) {
+      const newMessage = new MessageCreate(
+        this.messageStore.chat.id,
+        new Date(),
+        this.inputMessage);
+      this.messageStore.newMessage.next(newMessage);
+      this.inputMessage = null;
+    }
+    event.preventDefault();
   }
 }

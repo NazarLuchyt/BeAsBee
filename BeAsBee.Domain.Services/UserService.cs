@@ -89,26 +89,19 @@ namespace BeAsBee.Domain.Services {
         }
 
         public async Task<bool> CheckPasswordAsync ( string userName, string password ) {
-            var result = await _unitOfWork.UserRepository.CheckPasswordAsync( userName, password);
+            var result = await _unitOfWork.UserRepository.CheckPasswordAsync( userName, password );
             return result;
         }
-        //try {
-            //    var result = await _unitOfWork.UserRepository.CheckPasswordAsync( userName, password );
-            //    var obj = result.GetType();
-            //    IList<PropertyInfo> props = new List<PropertyInfo>( obj.GetProperties() );
-            //    //   IsSuccess = ( bool ) props.FirstOrDefault( prop => prop.Name == "Result" ).GetValue( obj, null )
-            //    return new OperationResult {
-            //        Value = props.FirstOrDefault( prop => prop.Name == "UserGuid" ).GetValue( result, null ),
-            //        IsSuccess = ( bool ) props.FirstOrDefault( prop => prop.Name == "Result" ).GetValue( result, null )
-            //    };
-            //} catch ( Exception ex ) {
-            //    return new OperationResult( ex );
-            //}
 
-            #endregion
-        
+        public async Task<OperationResult> CreateAsync ( UserEntity userModel, string password ) {
+            try {
+                var result = await _unitOfWork.UserRepository.CreateAsync( userModel, password );
+                return new OperationResult {IsSuccess = result};
+            } catch ( Exception ex ) {
+                return new OperationResult( ex );
+            }
+        }
 
-        //Task<UserEntity> GetRolesAsync ( string userName );
-        //Task<UserEntity> CheckPasswordAsync ( string userName );
+        #endregion
     }
 }
