@@ -22,16 +22,6 @@ namespace BeAsBee.Infrastructure.Sql.Repositories {
             _dbSet = _context.Set<Message>();
         }
 
-        //public override async Task<List<MessageEntity>> GetPagedAsync ( int count = 10, int page = 0,
-        //                                                                Expression<Func<TEntity, bool>> filter = null,
-        //                                                                params Expression<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>>[] includes ) {
-        //    var result = await GetAsync(new List<Expression<Func<Chat, bool>>> { i => i.Id == id },
-        //            c => c.Include(chat => chat.UserChats).ThenInclude(uChat => uChat.User),
-        //            c => c.Include(chat => chat.Messages))
-        //        .FirstOrDefaultAsync();
-        //    return Mapper.Map<ChatEntity>(result);
-        //}
-
         public override async Task<List<MessageEntity>> GetPagedAsync ( int count = 10, int page = 0,
                                                                         Expression<Func<MessageEntity, bool>> filter = null,
                                                                         params Expression<Func<IQueryable<MessageEntity>, IIncludableQueryable<MessageEntity, object>>>[] includes ) {
@@ -70,6 +60,13 @@ namespace BeAsBee.Infrastructure.Sql.Repositories {
                 .Take( count )
                 .ToListAsync();
             return Mapper.Map<List<MessageEntity>>( result );
+        }
+
+        public override async Task<MessageEntity> GetByIdAsync ( Guid id ) {
+            var result = await GetAsync( new List<Expression<Func<Message, bool>>> {i => i.Id == id},
+                    m => m.Include( msg => msg.User ) )
+                .FirstOrDefaultAsync();
+            return Mapper.Map<MessageEntity>( result );
         }
 
         //public async Task<int> CountAsync ( List<string> filterExpertises = null,

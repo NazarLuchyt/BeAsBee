@@ -61,11 +61,29 @@ namespace BeAsBee.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Someting was wrong: {0}.
+        /// </summary>
+        public static string COMMON_ERROR {
+            get {
+                return ResourceManager.GetString("COMMON_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The number of items per page cannot be null.
         /// </summary>
         public static string COUNT_CANNOT_BE_NULL {
             get {
                 return ResourceManager.GetString("COUNT_CANNOT_BE_NULL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with this email is already created..
+        /// </summary>
+        public static string EMAIL_ALREADY_EXIST {
+            get {
+                return ResourceManager.GetString("EMAIL_ALREADY_EXIST", resourceCulture);
             }
         }
         
@@ -120,6 +138,15 @@ namespace BeAsBee.Domain.Resources {
         public static string INNER_EXCEPTION {
             get {
                 return ResourceManager.GetString("INNER_EXCEPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This user is not exist..
+        /// </summary>
+        public static string LOGIN_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("LOGIN_DOES_NOT_EXIST", resourceCulture);
             }
         }
         

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace JSPWebsite.WebAPI.Filters {
+namespace BeAsBee.API.Filters {
     public class GlobalExceptionFilter : IExceptionFilter {
         private readonly ILogger<GlobalExceptionFilter> _logger;
 

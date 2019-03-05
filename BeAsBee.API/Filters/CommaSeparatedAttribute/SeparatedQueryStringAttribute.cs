@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace JSPWebsite.WebAPI.Filters.CommaSeparatedAttribute {
+namespace BeAsBee.API.Filters.CommaSeparatedAttribute {
     [AttributeUsage( AttributeTargets.Method | AttributeTargets.Class )]
     public class SeparatedQueryStringAttribute : Attribute, IResourceFilter {
         private readonly SeparatedQueryStringValueProviderFactory _factory;

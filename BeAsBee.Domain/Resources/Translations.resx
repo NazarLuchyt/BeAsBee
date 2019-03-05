@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="COMMON_ERROR" xml:space="preserve">
+    <value>Someting was wrong: {0}</value>
+  </data>
   <data name="COUNT_CANNOT_BE_NULL" xml:space="preserve">
     <value>The number of items per page cannot be null</value>
+  </data>
+  <data name="EMAIL_ALREADY_EXIST" xml:space="preserve">
+    <value>User with this email is already created.</value>
   </data>
   <data name="ENTITY_HAVE_INCORRECT_NUMBER_OF_IMAGES" xml:space="preserve">
     <value>Please choose correct number of images.</value>
@@ -137,6 +143,9 @@
   </data>
   <data name="INNER_EXCEPTION" xml:space="preserve">
     <value>Inner exception:  {0}</value>
+  </data>
+  <data name="LOGIN_DOES_NOT_EXIST" xml:space="preserve">
+    <value>This user is not exist.</value>
   </data>
   <data name="STACK_TRACE" xml:space="preserve">
     <value>Stack trace:  {0}</value>

@@ -1,0 +1,19 @@
+label {
+    width: 25%;
+}
+
+input {
+    display: inline-block;
+    width: 75%;
+}
+
+.error {
+    width: 75%;
+    float: right;
+    color: red;
+}
+
+.errors-container {
+    float: right;
+    width: 100%;
+}

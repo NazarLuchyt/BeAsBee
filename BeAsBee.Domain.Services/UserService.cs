@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BeAsBee.Domain.Common;
-using BeAsBee.Domain.Common.Exceptions;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
 using BeAsBee.Infrastructure.UnitOfWork;
@@ -62,19 +61,47 @@ namespace BeAsBee.Domain.Services {
             }
         }
 
-        public async Task<UserEntity> GetByEmail ( string email, string password ) {
-            var result = await _unitOfWork.UserRepository.GetByEmail( email );
-            if ( result != null && string.Equals( result.Password, password ) ) {
-                return result;
-            }
+        //public async Task<UserEntity> GetByEmail ( string email, string password ) {
+        //    var result = await _unitOfWork.UserRepository.GetByEmail( email );
+        //    if ( result != null && string.Equals( result.Password, password ) ) {
+        //        return result;
+        //    }
 
-            throw new ItemNotFoundException( "Email or password is incorrect!" );
-        }
+        //    throw new ItemNotFoundException( "Email or password is incorrect!" );
+        //}
 
         public async Task<PageResult<UserEntity>> GetPagedAsync ( int count = 100, int page = 0, string infoToSearch = null ) {
-            var listItems = await _unitOfWork.UserRepository.GetPagedAsync( count, page, infoToSearch);
-            var countItems = await _unitOfWork.UserRepository.CountAsync(infoToSearch);
+            var listItems = await _unitOfWork.UserRepository.GetPagedAsync( count, page, infoToSearch );
+            var countItems = await _unitOfWork.UserRepository.CountAsync( infoToSearch );
             return new PageResult<UserEntity> {Items = new List<UserEntity>( listItems ), Count = countItems, PageNumber = page};
         }
+
+        #region Identity
+
+        public async Task<UserEntity> FindByNameAsync ( string userName ) {
+            var result = await _unitOfWork.UserRepository.FindByNameAsync( userName );
+            return result;
+        }
+
+        public async Task<IList<string>> GetRolesAsync ( UserEntity userModel ) {
+            var result = await _unitOfWork.UserRepository.GetRolesAsync( userModel );
+            return result;
+        }
+
+        public async Task<bool> CheckPasswordAsync ( string userName, string password ) {
+            var result = await _unitOfWork.UserRepository.CheckPasswordAsync( userName, password );
+            return result;
+        }
+
+        public async Task<OperationResult> CreateAsync ( UserEntity userModel, string password ) {
+            try {
+                var result = await _unitOfWork.UserRepository.CreateAsync( userModel, password );
+                return new OperationResult {IsSuccess = result};
+            } catch ( Exception ex ) {
+                return new OperationResult( ex );
+            }
+        }
+
+        #endregion
     }
 }

@@ -1,0 +1,21 @@
+{
+    "LABEL": {
+        "LOGIN": {
+            "TEXT_LOGIN": "Login",
+            "TEXT_SIGN_IN": "Sign In",
+            "TEXT_PASSWORD": "Password",
+            "TEXT_LOG_OUT": "Log out"
+        }
+    },
+    "MESSAGE": {
+        "LOGIN": {
+            "ERROR_USERNAME_REQUIRED": "Please enter login (user name). This field is required!",
+            "ERROR_PASSWORD_REQUIRED": "Please enter password. This field is required!"
+        },
+        "REGISTRATION" : {
+            "ERROR_USERNAME_REQUIRED": "Please enter login (user name). This field is required!",
+            "ERROR_PASSWORD_REQUIRED": "Please enter password. This field is required!",
+            "ERROR_MIN_SIZE_4": "Min size for this field 4 charters!"
+        }
+    }
+}

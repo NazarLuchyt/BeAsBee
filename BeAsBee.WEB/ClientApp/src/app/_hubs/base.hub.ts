@@ -1,5 +1,5 @@
 import { Inject } from '@angular/core/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 
@@ -32,7 +32,8 @@ export class BaseHub {
         this.error = this.errorSubject.asObservable();
         this.starting = this.startingSubject.asObservable();
         this.closing = this.closeSubject.asObservable();
-        const hubUrl: string = this.BASEURL + hubName;
+        const token = JSON.parse(localStorage.getItem('currentUser')).token;
+        const hubUrl: string = this.BASEURL + hubName + '?token=' + token;
         this.hubConnection = new HubConnectionBuilder().withUrl(hubUrl).build();
 
         // this.hubConnection.onclose(() => {

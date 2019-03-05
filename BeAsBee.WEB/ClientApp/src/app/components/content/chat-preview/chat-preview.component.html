@@ -1,0 +1,7 @@
+<div class="chat_people" (click)="getChat()">
+  <div class="chat_img"> <img [src]="defaultImg" alt="sunil"> </div>
+  <div class="chat_ib">
+    <h5>{{chatItem?.name}} <span class="chat_date"> {{lastMessage?.receivedTime | date:'MMM d' }}</span></h5>
+    <p class="last-mesg">{{lastMessage?.messageText}}</p>
+  </div>
+</div>

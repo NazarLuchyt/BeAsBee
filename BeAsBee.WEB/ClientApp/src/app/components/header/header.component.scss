@@ -1,0 +1,23 @@
+@import 'src/assets/styles/variable.scss';
+.main-header {
+    background-color: $base-backround-color;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 5px;
+}
+
+.header-img {
+    height: 70px;
+    margin-left: 60px;
+}
+
+.flex-container {
+    display: flex;
+    // justify-content: space-between;
+}
+
+.log-out {
+    font-size: large;
+    margin-top: 20px;
+    cursor: pointer;
+}

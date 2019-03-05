@@ -1,55 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BeAsBee.Infrastructure.Sql.Models;
 using BeAsBee.Infrastructure.Sql.Models.Context;
+using BeAsBee.Infrastructure.Sql.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace BeAsBee.API.Areas.v1.Data {
     public static class SeedData {
-        public static void Initialize ( ApplicationContext db ) {
+        public static async Task Initialize ( ApplicationContext db, RoleManager<Role> roleManager, UserManager<User> userManager ) {
             db.Database.EnsureCreated();
 
             if ( db.Users.Any() ) {
                 return;
             }
 
+            #region Roles
+
+            await roleManager.CreateAsync( new Role {Name = "Admin"} );
+            await roleManager.CreateAsync( new Role {Name = "User"} );
+
+            #endregion
+
             #region Users
 
             var user1 = new User {
-                Id = Guid.NewGuid(),
-                Email = "test1",
-                Password = "test1",
+                UserName = "test1",
+                Email = "test1@gmail.com",
                 FirstName = "Павло",
                 SecondName = "Дідик"
             };
             var user2 = new User {
-                Id = Guid.NewGuid(),
-                Email = "test2",
-                Password = "test2",
+                UserName = "test2",
+                Email = "test2@gmail.com",
                 FirstName = "Андрій",
                 SecondName = "Лопатін"
             };
             var user3 = new User {
-                Id = Guid.NewGuid(),
-                Email = "test3",
-                Password = "test3",
+                UserName = "test3",
+                Email = "test3@gmail.com",
                 FirstName = "Сергій",
                 SecondName = "Скорилко"
             };
             var user4 = new User {
-                Id = Guid.NewGuid(),
-                Email = "test4",
-                Password = "test4",
+                UserName = "test4",
+                Email = "test4@gmail.com",
                 FirstName = "Назар",
                 SecondName = "Лучит"
             };
 
-            db.Users.Add( user1 );
-            db.Users.Add( user2 );
-            db.Users.Add( user3 );
-            db.Users.Add( user4 );
+            await userManager.CreateAsync( user1, "test1" );
+            await userManager.CreateAsync( user2, "test2" );
+            await userManager.CreateAsync( user3, "test3" );
+            await userManager.CreateAsync( user4, "test4" );
+
+            await userManager.AddToRoleAsync( user1, "User" );
+            await userManager.AddToRoleAsync( user2, "User" );
+            await userManager.AddToRoleAsync( user3, "User" );
+            await userManager.AddToRoleAsync( user4, "User" );
 
             #endregion
+
+            db.SaveChanges();
 
             #region Chats
 
@@ -61,21 +74,18 @@ namespace BeAsBee.API.Areas.v1.Data {
                     new Message {
                         Id = Guid.NewGuid(),
                         MessageText = "Привіт, коли потрібно на пари?",
-                        UserName = user1.FirstName + " " + user1.SecondName,
                         ReceivedTime = new DateTimeOffset( new DateTime( 2010, 10, 10 ) ).AddDays( 2 ),
                         UserId = user1.Id
                     },
                     new Message {
                         Id = Guid.NewGuid(),
                         MessageText = "Привіт завтра на 12!",
-                        UserName = user2.FirstName + " " + user2.SecondName,
                         ReceivedTime = new DateTimeOffset( new DateTime( 2010, 10, 10 ) ).AddDays( 2 ),
                         UserId = user2.Id
                     },
                     new Message {
                         Id = Guid.NewGuid(),
                         MessageText = "Дякую, до завтра!",
-                        UserName = user3.FirstName + " " + user3.SecondName,
                         ReceivedTime = new DateTimeOffset( new DateTime( 2010, 10, 10 ) ).AddDays( 32 ),
                         UserId = user3.Id
                     }
@@ -89,13 +99,11 @@ namespace BeAsBee.API.Areas.v1.Data {
                     new Message {
                         Id = Guid.NewGuid(),
                         MessageText = "Привіт, ідеш гуляти?",
-                        UserName = user1.FirstName + " " + user1.SecondName,
                         ReceivedTime = new DateTimeOffset( new DateTime( 2010, 10, 10 ) ).AddDays( 52 ),
                         UserId = user1.Id
                     },
                     new Message {
                         Id = Guid.NewGuid(),
-                        UserName = user2.FirstName + " " + user2.SecondName,
                         MessageText = "Так звичайно. Пішли!",
                         ReceivedTime = new DateTimeOffset( new DateTime( 2010, 10, 10 ) ).AddDays( 2 ),
                         UserId = user2.Id

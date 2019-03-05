@@ -4,7 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using BeAsBee.Domain.Common.Exceptions;
 using BeAsBee.Domain.Entities;
+using BeAsBee.Domain.Resources;
 using BeAsBee.Infrastructure.Common;
 using BeAsBee.Infrastructure.Sql.Models.Context;
 using Castle.Core.Internal;
@@ -43,7 +45,7 @@ namespace BeAsBee.Infrastructure.Sql.Common {
         public virtual async Task DeleteAsync ( TKey id ) {
             var result = await _dbSet.FindAsync( id );
             if ( result == null ) {
-            //    throw new ItemNotFoundException( string.Format( Translations.ENTITY_WITH_ID_NOT_FOUND, Translations.ResourceManager.GetString( typeof( T ).Name ) ?? typeof( T ).Name, id ) );
+                throw new ItemNotFoundException( string.Format( Translations.ENTITY_WITH_ID_NOT_FOUND, Translations.ResourceManager.GetString( typeof( T ).Name ) ?? typeof( T ).Name, id ) );
             }
 
             _dbSet.Remove( result );
@@ -56,7 +58,7 @@ namespace BeAsBee.Infrastructure.Sql.Common {
         public virtual async Task UpdateAsync ( TKey id, TEntity entity ) {
             var result = await _dbSet.FindAsync( id );
             if ( result == null ) {
-             //   throw new ItemNotFoundException( string.Format( Translations.ENTITY_WITH_ID_NOT_FOUND, Translations.ResourceManager.GetString( typeof( T ).Name ) ?? typeof( T ).Name, id ) );
+                //   throw new ItemNotFoundException( string.Format( Translations.ENTITY_WITH_ID_NOT_FOUND, Translations.ResourceManager.GetString( typeof( T ).Name ) ?? typeof( T ).Name, id ) );
             }
 
             _context.Entry( result ).CurrentValues.SetValues( Mapper.Map<T>( entity ) );
@@ -105,8 +107,8 @@ namespace BeAsBee.Infrastructure.Sql.Common {
         }
 
         public virtual async Task<List<TEntity>> GetPagedAsync ( int count = 10, int page = 0,
-                                                           Expression<Func<TEntity, bool>> filter = null,
-                                                           params Expression<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>>[] includes ) {
+                                                                 Expression<Func<TEntity, bool>> filter = null,
+                                                                 params Expression<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>>[] includes ) {
             var filtersSql = Mapper.Map<Expression<Func<T, bool>>>( filter );
             var includesSql = Mapper.Map<List<Expression<Func<IQueryable<T>, IIncludableQueryable<T, object>>>>>( includes ).ToArray();
 

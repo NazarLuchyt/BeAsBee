@@ -4,6 +4,8 @@ import { Message } from '../_models/message.model';
 import { User } from '../_models/user.model';
 import { MessageCreate } from '../_models/message-create.model';
 import { Observable, from } from 'rxjs';
+import { ChatCreate } from '../_models/chat-create.model';
+import { Chat } from '../_models/chat.model';
 
 @Injectable()
 
@@ -35,6 +37,14 @@ export class ChatHub extends BaseHub {
 
   onUserStatusChange(fn: (connectionId: string, userId: string) => void) {
     this.hubConnection.on('OnUserStatusChange', fn);
+  }
+
+  onChatCreated(fn: (chat: Chat) => void) {
+    this.hubConnection.on('OnChatCreated', fn);
+  }
+
+  createNewChat(idNewChat: string) {
+    return from(this.hubConnection.invoke('CreateNewChat', idNewChat));
   }
 
   sendMessage(message: MessageCreate): Observable<Message> {

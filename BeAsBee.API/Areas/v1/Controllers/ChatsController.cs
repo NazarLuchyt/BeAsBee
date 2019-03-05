@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BeAsBee.API.Areas.v1.Common;
@@ -7,7 +8,6 @@ using BeAsBee.API.Areas.v1.Models.Common;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
 using BeAsBee.Domain.Resources;
-using BeAsBee.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeAsBee.API.Areas.v1.Controllers {
@@ -48,6 +48,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             }
 
             var result = await _chatService.GetPagedAsync( userId, countMessage, count, page );
+
             var viewModels = _mapper.Map<PageResultViewModel<ChatViewModel>>( result );
             return Ok( viewModels );
         }
@@ -64,10 +65,19 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             }
 
             var modelEntity = _mapper.Map<ChatEntity>( model );
+            modelEntity.UserId = Guid.Parse( HttpContext.User.Identity.Name );
+            var currentUserFromIdentity = new UserEntity {
+                Id = Guid.Parse( HttpContext.User.Identity.Name )
+            };
+            modelEntity.UserChats.Add( currentUserFromIdentity );
+
             var result = await _chatService.CreateAsync( modelEntity );
             if ( !result.IsSuccess ) {
                 throw result.Exception;
             }
+
+            // TODO chage way to get with User chat
+            result.Value.UserChats = modelEntity.UserChats;
 
             var viewModel = _mapper.Map<ChatViewModel>( result.Value );
             return Ok( viewModel );
