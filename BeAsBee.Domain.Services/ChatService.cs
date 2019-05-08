@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BeAsBee.Domain.Common;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
+using BeAsBee.Domain.Resources;
 using BeAsBee.Infrastructure.UnitOfWork;
 
 namespace BeAsBee.Domain.Services {
@@ -68,6 +70,35 @@ namespace BeAsBee.Domain.Services {
                 await _unitOfWork.ChatRepository.UpdateAsync( id, entity );
                 await _unitOfWork.SaveChangesAsync();
                 return new OperationResult {IsSuccess = true};
+            } catch ( Exception ex ) {
+                return new OperationResult( ex );
+            }
+        }
+
+        public async Task<OperationResult> AddUsersAsync ( Guid id, List<Guid> newUserGuids ) {
+            try {
+                if ( !await _unitOfWork.ChatRepository.ExistsAsync( i => i.Id == id ) ) {
+                    //TODO error handler
+                }
+
+                await _unitOfWork.ChatRepository.AddUsersAsync( id, newUserGuids );
+                await _unitOfWork.SaveChangesAsync();
+                return new OperationResult {IsSuccess = true};
+            } catch ( Exception ex ) {
+                return new OperationResult( ex );
+            }
+        }
+
+        public async Task<OperationResult> RemoveUsersAsync ( Guid id, List<Guid> removeUserGuids ) {
+            try {
+                if ( !await _unitOfWork.ChatRepository.ExistsAsync( i => i.Id == id ) ) {
+                    //TODO error handler
+                }
+
+                var removedUsers = await _unitOfWork.ChatRepository.RemoveUsersAsync( id, removeUserGuids );
+                var errorMessage = string.Join( ", ", removedUsers.Select( user => user.FirstName + " " + user.SecondName ) );
+                await _unitOfWork.SaveChangesAsync();
+                return new OperationResult {Value = string.Format( Translations.REMOVED_USERS, errorMessage ), IsSuccess = true};
             } catch ( Exception ex ) {
                 return new OperationResult( ex );
             }

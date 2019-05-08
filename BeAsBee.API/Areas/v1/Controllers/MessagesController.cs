@@ -30,7 +30,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         [Route("{id}")]
         public async Task<IActionResult> GetByChat ( Guid id ) {
             var result = await _messageService.GetByChatId(id);
-            var viewModel = _mapper.Map<List<MessageViewModel>>(result);
+            var viewModel = Mapper.Map<List<MessageViewModel>>(result);
             return Ok(viewModel);
         }
 
@@ -43,7 +43,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         //[Route( "{id:int}" )]
         //public async Task<IActionResult> GetById ( Guid id ) {
         //    var result = await  _messageService.GetByIdAsync( id );
-        //    var viewModel = _mapper.Map<MessageViewModel>( result );
+        //    var viewModel = Mapper.Map<MessageViewModel>( result );
         //    return Ok( viewModel );
         //}
 
@@ -60,7 +60,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             }
 
             var result = await  _messageService.GetPagedAsync( count, page );
-            var viewModels = _mapper.Map<PageResultViewModel<MessageViewModel>>( result );
+            var viewModels = Mapper.Map<PageResultViewModel<MessageViewModel>>( result );
             return Ok( viewModels );
         }
 
@@ -75,13 +75,13 @@ namespace BeAsBee.API.Areas.v1.Controllers {
                 return BadRequest(ModelState);
             }
 
-            var modelEntity = _mapper.Map<MessageEntity>(model);
+            var modelEntity = Mapper.Map<MessageEntity>(model);
             var result = await _messageService.CreateAsync(modelEntity);
             if ( !result.IsSuccess ) {
                 throw result.Exception;
             }
 
-            var viewModel = _mapper.Map<MessageViewModel>(result.Value);
+            var viewModel = Mapper.Map<MessageViewModel>(result.Value);
             return Ok(viewModel);
         }
 
@@ -97,7 +97,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         //        return BadRequest(ModelState);
         //    }
 
-        //    var modelEntity = _mapper.Map<MessageEntity>(model);
+        //    var modelEntity = Mapper.Map<MessageEntity>(model);
         //    var result = await  _messageService.UpdateAsync(id, modelEntity);
         //    if ( !result.IsSuccess ) {
         //        throw result.Exception;

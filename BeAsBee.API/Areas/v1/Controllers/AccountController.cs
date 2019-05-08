@@ -94,7 +94,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
                 return BadRequest( ModelState );
             }
 
-            var modelEntity = _mapper.Map<UserEntity>( model );
+            var modelEntity = Mapper.Map<UserEntity>( model );
             var result = await _userService.CreateAsync( modelEntity, model.Password );
             if ( !result.IsSuccess ) {
                 var errList = "";

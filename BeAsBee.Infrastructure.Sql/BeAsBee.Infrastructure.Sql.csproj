@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BeAsBee.Infrastructure\BeAsBee.Infrastructure.csproj" />
+    <ProjectReference Include="..\BeeAsBee.Utilities\BeAsBee.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

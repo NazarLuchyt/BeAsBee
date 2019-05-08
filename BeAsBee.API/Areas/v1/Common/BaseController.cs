@@ -6,10 +6,10 @@ namespace BeAsBee.API.Areas.v1.Common {
     [Authorize( AuthenticationSchemes = "Bearer" )]
     //  [AuthorizeRoles(RoleType.User, RoleType.Admin)]
     public class BaseController : Controller {
-        protected IMapper _mapper;
+        protected readonly IMapper Mapper;
 
         public BaseController ( IMapper mapper ) {
-            _mapper = mapper;
+            Mapper = mapper;
         }
     }
 }

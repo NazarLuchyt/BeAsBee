@@ -6,22 +6,13 @@
           <div class="recent_heading">
             <h4>{{currentUser.firstName}} {{currentUser.secondName}}</h4>
           </div>
-          <div class="srch_bar">
-            <div class="stylish-input-group">
-              <input #inputText type="text" class="search-bar" placeholder="Search">
-              <span class="input-group-addon">
-                <button (click)="searchUser(inputText.value);" type="button"> <i class="fa fa-search"
-                    aria-hidden="true"></i>
-                </button>
-              </span>
-            </div>
-          </div>
+          <app-search (inputtedText)="searchUser($event)"></app-search>
         </div>
         <div class="inbox_chat">
           <div [hidden]="!isSearch">
             <div class="clear input-group-addon">
-              <button class="clear-button" (click)="findedUsers = []; isSearch = false; inputText.value = ''; "
-                type="button">Clear search result<i class="fa fa-times" aria-hidden="true"></i>
+              <button class="clear-button" (click)="clearSearch()" type="button">Clear search result<i
+                  class="fa fa-times" aria-hidden="true"></i>
               </button>
             </div>
             <app-user-preview [setfindedUsers]="findedUsers" (returnNewChat)="addNewChatToArray($event)">
@@ -30,24 +21,24 @@
 
           <div [hidden]="isSearch" *ngFor="let chatItem of currentUser?.userChats" class="chat_list"
             [ngClass]="{'active_chat': currentChatId==chatItem.id}" style="cursor: pointer;">
-            <app-chat-preview [chatItem]="chatItem" (pushMessage)="scroll($event)" [isNewChat]="chatItem.id==guidNewChat ? true : false"
-              (returnChatId)="getCurrentChatId($event)">
+            <app-chat-preview [chatItem]="chatItem" (pushMessage)="scroll($event)"
+              [isNewChat]="chatItem.id==guidNewChat ? true : false" (returnChatId)="getCurrentChatId($event)">
             </app-chat-preview>
           </div>
 
         </div>
       </div>
-      <div class="mesgs">
-        <!-- {{currentUser?.messages?.lenght}} -->
-        <div *ngIf="!currentChatId; else message_box">
-          <h1>
-            Please Select Chat to start chating
-          </h1>
-        </div>
-        <ng-template #message_box>
-          <app-chat></app-chat>
-        </ng-template>
+
+      <!-- {{currentUser?.messages?.lenght}} -->
+      <div *ngIf="!currentChatId; else message_box">
+        <h1>
+          Please Select Chat to start chating
+        </h1>
       </div>
+      <ng-template #message_box>
+        <app-chat-setting [chatId]="currentChatId"></app-chat-setting>
+        <app-chat></app-chat>
+      </ng-template>
     </div>
   </div>
 </div>

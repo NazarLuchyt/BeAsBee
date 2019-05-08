@@ -20,6 +20,7 @@ import { ChatComponent } from './components/content/chat/chat.component';
 import { ChatPreviewComponent } from './components/content/chat-preview/chat-preview.component';
 import { RegistrationComponent } from './components/authorization/registration/registration.component';
 import { UserPreviewComponent } from './components/content/user-preview/user-preview.component';
+import { ChatMembersModalComponent } from './components/content/chat-members-modal/chat-members-modal.component';
 
 import { AuthGuard } from './_guard/auth.guard';
 import { routing } from './app.routing';
@@ -28,10 +29,13 @@ import { routing } from './app.routing';
 import { ApiService } from './_services/api.services';
 import { AuthenticationService } from './_services/authentication.service';
 import { JwtInterceptor } from './_services/jwt.interceptor';
-import { MessageStoreService } from './_services/message.store.service';
 import { ChatService } from './_services/chat.service';
 import { MessageComponent } from './components/content/message/message.component';
-
+import { ChatSettingComponent } from './components/content/chat-setting/chat-setting.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { SearchComponent } from './components/common/search/search.component';
+import { SelectComponent } from './components/common/select/select.component';
+import { ChatConfigService } from './_services/chat-config.service';
 
 @NgModule({
   declarations: [
@@ -45,12 +49,20 @@ import { MessageComponent } from './components/content/message/message.component
     ChatPreviewComponent,
     RegistrationComponent,
     UserPreviewComponent,
-    MessageComponent
+    MessageComponent,
+    ChatSettingComponent,
+    ChatMembersModalComponent,
+    SearchComponent,
+    SelectComponent
+  ],
+  entryComponents: [
+    ChatMembersModalComponent
   ],
   imports: [
     BrowserModule,
     routing,
     TabsModule.forRoot(),
+    ModalModule.forRoot(),
     TranslateModule.forRoot(
       {
         loader:
@@ -68,7 +80,7 @@ import { MessageComponent } from './components/content/message/message.component
     // services
     ApiService,
     AuthenticationService,
-    MessageStoreService,
+    ChatConfigService,
     ChatService,
 
     // Guards

@@ -39,14 +39,6 @@ export class ChatHub extends BaseHub {
     this.hubConnection.on('OnUserStatusChange', fn);
   }
 
-  onChatCreated(fn: (chat: Chat) => void) {
-    this.hubConnection.on('OnChatCreated', fn);
-  }
-
-  createNewChat(idNewChat: string) {
-    return from(this.hubConnection.invoke('CreateNewChat', idNewChat));
-  }
-
   sendMessage(message: MessageCreate): Observable<Message> {
     return from(this.hubConnection.invoke('SendAsync', message));
   }
@@ -65,5 +57,34 @@ export class ChatHub extends BaseHub {
 
   closed(): Observable<any> {
     return this.closing;
+  }
+
+  // ------ new functions 
+  onChatCreated(fn: (chat: Chat) => void) {
+    this.hubConnection.on('OnChatCreated', fn);
+  }
+
+  disconnectUserFromChat(chatId: string) {
+    return from(this.hubConnection.invoke('DisconnectUserFromChat', chatId));
+  }
+
+  onUserKicked(fn: (chat: Chat, message: string) => void) {
+    this.hubConnection.on('OnUserKicked', fn);
+  }
+
+  onRemoveUsers(fn: (chat: Chat, message: string) => void) {
+    this.hubConnection.on('OnRemoveUsers', fn);
+  }
+
+  createNewChat(idNewChat: string) {
+    return from(this.hubConnection.invoke('CreateNewChat', idNewChat));
+  }
+
+  startNewChat(idNewChat: string, newUsersGuid: string[]) {
+    return from(this.hubConnection.invoke('StartChatForNewUsers', idNewChat, newUsersGuid));
+  }
+
+  removeUsers(chatId: string, removeUsersGuid: string[]) {
+    return from(this.hubConnection.invoke('RemoveUsersFromChat', chatId, removeUsersGuid));
   }
 }

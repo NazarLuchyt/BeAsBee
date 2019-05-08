@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\v1\Views\**" />
+    <Content Remove="Areas\v1\Views\**" />
+    <EmbeddedResource Remove="Areas\v1\Views\**" />
+    <None Remove="Areas\v1\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Areas\v1\Data\" />
-    <Folder Include="Areas\v1\Views\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

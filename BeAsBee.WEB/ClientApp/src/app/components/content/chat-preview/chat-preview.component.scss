@@ -1,8 +1,12 @@
-.last-mesg{
+.last-mesg {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     text-align: -webkit-left;
-    width: 94%;
+    width: 85%;
     margin-left: 0px;
+}
+
+.chat-date {
+    font-weight: bold;
 }

@@ -144,8 +144,14 @@
   <data name="INNER_EXCEPTION" xml:space="preserve">
     <value>Inner exception:  {0}</value>
   </data>
+  <data name="KICKED_BY_ADMIN" xml:space="preserve">
+    <value>Your was kicked from chat by administrator. Have a nice day!</value>
+  </data>
   <data name="LOGIN_DOES_NOT_EXIST" xml:space="preserve">
     <value>This user is not exist.</value>
+  </data>
+  <data name="REMOVED_USERS" xml:space="preserve">
+    <value>User(s) [{0}] was (were) removed from chat.</value>
   </data>
   <data name="STACK_TRACE" xml:space="preserve">
     <value>Stack trace:  {0}</value>

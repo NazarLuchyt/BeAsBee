@@ -1,5 +1,17 @@
-.incoming_msg {
-    margin-top: 10px;
+@import 'src/assets/styles/variable.scss';
+.system-message {
+    display: flex;
+    justify-content: center;
+    .system-text {
+        margin-top: 10px;
+        word-break: break-all;
+        background: $base-background-color-system-text none repeat scroll 0 0;
+        border-radius: 25px;
+        font-size: 14px;
+        font-family: 'Arial Black', Gadget, sans-serif;
+        margin: 0 0 5px 0;
+        padding: 5px 10px 5px 12px;
+    }
 }
 
 .incoming_msg_img {

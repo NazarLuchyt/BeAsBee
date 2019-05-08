@@ -1,0 +1,11 @@
+<app-search (inputtedText)="searchUser($event)">
+</app-search>
+
+<app-select [(items)]="chatMembers">
+</app-select>
+
+<div class="cancel">
+  <a (click)="close()">{{'ADMIN.TEXT_CLOSE' | translate}}</a>
+</div>
+
+<button (click)="applyChanges()">{{buttonLabel | translate}}</button>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BeAsBee.API.Areas.v1.Common;
@@ -15,9 +16,11 @@ namespace BeAsBee.API.Areas.v1.Controllers {
     [Route( "api/v1/[controller]" )]
     public class UsersController : BaseController {
         private readonly IUserService _userService;
+        private readonly IChatService _chatService;
 
-        public UsersController ( IUserService userService, IMapper mapper ) : base( mapper ) {
+        public UsersController ( IChatService chatService, IUserService userService, IMapper mapper ) : base( mapper ) {
             _userService = userService;
+            _chatService = chatService;
         }
 
         /// <summary>
@@ -32,11 +35,11 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             var result = await _userService.GetByIdAsync( id );
 
             if ( userViewType == UserViewTypeEnum.Home ) {
-                return Ok( _mapper.Map<UserPageBindingModel>( result ) );
+                return Ok( Mapper.Map<UserPageBindingModel>( result ) );
             }
 
             // var result = await _userService.GetByIdAsync( id );
-            // viewModel = _mapper.Map<UserViewModel>( result );
+            // viewModel = Mapper.Map<UserViewModel>( result );
             return Ok();
         }
 
@@ -54,7 +57,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             }
 
             var result = await _userService.GetPagedAsync( count, page, infoToSearch );
-            var viewModels = _mapper.Map<PageResultViewModel<UserPageBindingModel>>( result );
+            var viewModels = Mapper.Map<PageResultViewModel<UserPageBindingModel>>( result );
             return Ok( viewModels );
         }
 
@@ -69,13 +72,13 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         //        return BadRequest( ModelState );
         //    }
 
-        //    var modelEntity = _mapper.Map<UserEntity>( model );
+        //    var modelEntity = Mapper.Map<UserEntity>( model );
         //    var result = await _userService.CreateAsync( modelEntity );
         //    if ( !result.IsSuccess ) {
         //        throw result.Exception;
         //    }
 
-        //    var viewModel = _mapper.Map<UserViewModel>( result.Value );
+        //    var viewModel = Mapper.Map<UserViewModel>( result.Value );
         //    return Ok( viewModel );
         //}
 
@@ -91,7 +94,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         //        return BadRequest( ModelState );
         //    }
 
-        //    var modelEntity = _mapper.Map<UserEntity>( model );
+        //    var modelEntity = Mapper.Map<UserEntity>( model );
         //    var result = await _userService.UpdateAsync( id, modelEntity );
         //    if ( !result.IsSuccess ) {
         //        throw result.Exception;

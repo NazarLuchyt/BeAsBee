@@ -142,11 +142,29 @@ namespace BeAsBee.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your was kicked from chat by administrator. Have a nice day!.
+        /// </summary>
+        public static string KICKED_BY_ADMIN {
+            get {
+                return ResourceManager.GetString("KICKED_BY_ADMIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This user is not exist..
         /// </summary>
         public static string LOGIN_DOES_NOT_EXIST {
             get {
                 return ResourceManager.GetString("LOGIN_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User(s) [{0}] was (were) removed from chat..
+        /// </summary>
+        public static string REMOVED_USERS {
+            get {
+                return ResourceManager.GetString("REMOVED_USERS", resourceCulture);
             }
         }
         

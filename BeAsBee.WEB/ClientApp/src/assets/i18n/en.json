@@ -5,6 +5,14 @@
             "TEXT_SIGN_IN": "Sign In",
             "TEXT_PASSWORD": "Password",
             "TEXT_LOG_OUT": "Log out"
+        },
+        "CHAT": {
+            "ADD_NEW_USER": "Add new users ",
+            "REMOVE_USER": "Remove users ",
+            "CHAT_SETTING": {
+                "ADD": "Add",
+                "REMOVE": "Remove"
+            }
         }
     },
     "MESSAGE": {
@@ -12,7 +20,7 @@
             "ERROR_USERNAME_REQUIRED": "Please enter login (user name). This field is required!",
             "ERROR_PASSWORD_REQUIRED": "Please enter password. This field is required!"
         },
-        "REGISTRATION" : {
+        "REGISTRATION": {
             "ERROR_USERNAME_REQUIRED": "Please enter login (user name). This field is required!",
             "ERROR_PASSWORD_REQUIRED": "Please enter password. This field is required!",
             "ERROR_MIN_SIZE_4": "Min size for this field 4 charters!"

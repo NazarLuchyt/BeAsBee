@@ -30,12 +30,6 @@ img {
     width: 40%;
 }
 
-.srch_bar {
-    display: inline-block;
-    text-align: right;
-    width: 60%;
-}
-
 .headind_srch {
     padding: 10px 29px 10px 20px;
     overflow: hidden;
@@ -46,26 +40,6 @@ img {
     color: #05728f;
     font-size: 21px;
     margin: auto;
-}
-
-.srch_bar input {
-    border: 1px solid #cdcdcd;
-    border-width: 0 0 1px 0;
-    width: 80%;
-    padding: 2px 0 4px 6px;
-    background: none;
-}
-
-.srch_bar .input-group-addon button {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    border: medium none;
-    padding: 0;
-    color: #707070;
-    font-size: 18px;
-}
-
-.srch_bar .input-group-addon {
-    margin: 0 0 0 -27px;
 }
 
 .chat_ib h5 {

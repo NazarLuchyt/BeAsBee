@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BeAsBee.API.Areas.v1.Models.Message;
+using BeAsBee.API.Helpers;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
 using BeAsBee.Domain.Resources;
@@ -13,25 +15,31 @@ namespace BeAsBee.API.Hubs {
     [Authorize( AuthenticationSchemes = "Bearer" )]
     public class ChatHub : Hub {
         private readonly IChatService _chatService;
-        private readonly IMapper _mapper;
+        private readonly IConnectionMapping _connectionMapping;
+        private readonly IMapper Mapper;
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
 
-        public ChatHub ( IMessageService messageService, IMapper mapper, IUserService userService, IChatService chatService ) {
+        public ChatHub ( IMessageService messageService, IMapper mapper, IUserService userService, IChatService chatService, IConnectionMapping connectionMapping ) {
             _messageService = messageService;
-            _mapper = mapper;
+            Mapper = mapper;
             _userService = userService;
             _chatService = chatService;
+            _connectionMapping = connectionMapping;
         }
 
         // public async Task SendAsync ( MessageDTO messageDTO )
         public async Task SendAsync ( CreateMessageBindingModel message ) {
+            if ( !_connectionMapping.UserInChatExist( message.ChatId.ToString(), Context.UserIdentifier ) ) {
+                throw new HubException( "Error!!" );
+            }
+
             var user = await _userService.GetByIdAsync( Guid.Parse( Context.UserIdentifier ) );
             if ( user == null ) {
                 await Clients.Group( message.ChatId.ToString() ).SendAsync( "OnSend", Context.ConnectionId, string.Format( Translations.COMMON_ERROR, "Can not found current user!" ) );
             }
 
-            var modelEntity = _mapper.Map<MessageEntity>( message );
+            var modelEntity = Mapper.Map<MessageEntity>( message );
             modelEntity.UserId = user?.Id;
 
             var result = await _messageService.CreateAsync( modelEntity );
@@ -39,7 +47,7 @@ namespace BeAsBee.API.Hubs {
                 throw result.Exception;
             }
 
-            var viewModel = _mapper.Map<MessageViewModel>( await _messageService.GetByIdAsync( result.Value.Id ) );
+            var viewModel = Mapper.Map<MessageViewModel>( await _messageService.GetByIdAsync( result.Value.Id ) );
             await Clients.Group( viewModel.ChatId.ToString() ).SendAsync( "OnSend", Context.ConnectionId, viewModel );
         }
 
@@ -50,20 +58,44 @@ namespace BeAsBee.API.Hubs {
             }
         }
 
-        public async Task ConnectToChatAsync ( string chatId ) {
-            await Groups.AddToGroupAsync( Context.ConnectionId, chatId );
-            // await Clients.User(  ).SendAsync( "OnSend", Context.ConnectionId, viewModel );
+        public async Task StartChatForNewUsers ( Guid chatId, Guid[] newUserGuids ) {
+            var result = await _chatService.AddUsersAsync( chatId, newUserGuids.ToList() );
+            if ( !result.IsSuccess ) {
+                throw new HubException( result.Exception.Message );
+            }
 
-            //var userId = Context.User?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sid)?.Value; // Get user id from token Sid claim
-            //var user = await _unitOfWork.UserManager.FindByIdAsync(userId);
-            //if ( user != null ) {
-            //    await Groups.AddAsync(Context.ConnectionId, chatId);
-            //    //await _cache.Database.ListRightPushAsync("UserChats"+ user.Id, chatId);
-            //    //await _cache.Database.ListRightPushAsync("UsersStatus" + user.Id, (int)user.Status);
-            //    await _cache.Database.StringSetAsync(Context.ConnectionId, chatId);
-            //    await _cache.Database.StringSetAsync($"uc{userId}{chatId}", (int) UserStatusType.Online);
-            //    await Clients.Group(chatId).InvokeAsync("OnConnectToChat", Context.ConnectionId, _mapper.Map<UserDTO>(user));
-            //    await Clients.Group(chatId).InvokeAsync("OnUserStatusChange", Context.ConnectionId, userId, UserStatusType.Online);
+            var chat = await _chatService.GetByIdAsync( chatId );
+            foreach ( var newUserGuid in newUserGuids ) {
+                await Clients.User( newUserGuid.ToString() ).SendAsync( "OnChatCreated", chat );
+            }
+        }
+
+        public async Task RemoveUsersFromChat ( Guid chatId, Guid[] removeUserGuids ) {
+            var result = await _chatService.RemoveUsersAsync( chatId, removeUserGuids.ToList() );
+            if ( !result.IsSuccess ) {
+                throw new HubException( result.Exception.Message );
+            }
+
+            var chat = await _chatService.GetByIdAsync( chatId );
+            IReadOnlyList<string> users = removeUserGuids.Select( id => id.ToString() ).ToArray();
+            await Clients.Users( users ).SendAsync( "OnUserKicked", chat, Translations.KICKED_BY_ADMIN );
+            foreach ( var user in users ) {
+                await Groups.RemoveFromGroupAsync( _connectionMapping.GetConnectionIdFromChatByUserId( chatId.ToString(), user ), chatId.ToString() );
+                _connectionMapping.DeleteUserFromChat( chatId.ToString(), user );
+            }
+
+            await Clients.Group( chatId.ToString() ).SendAsync( "OnRemoveUsers", chat, result.Value );
+        }
+
+        public async Task DisconnectUserFromChat ( string chatId ) {
+            _connectionMapping.DeleteUserFromChat( chatId, Context.UserIdentifier );
+            await Groups.RemoveFromGroupAsync( Context.ConnectionId, chatId );
+        }
+
+        public async Task ConnectToChatAsync ( string chatId ) {
+            _connectionMapping.AddUserToChat( chatId, Context.ConnectionId, Context.UserIdentifier );
+            // _connections.Add( chatId, Context.ConnectionId );
+            await Groups.AddToGroupAsync( Context.ConnectionId, chatId );
         }
     }
 }

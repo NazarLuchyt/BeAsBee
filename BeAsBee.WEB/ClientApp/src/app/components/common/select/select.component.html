@@ -1,0 +1,9 @@
+<div class="form-group">
+  <div class="offer-item">
+    <div *ngFor="let itemObj of items" class="offer-items">
+      <input type="checkbox" id="{{itemObj.item.id}}" [checked]="itemObj.checked"
+        (click)="itemObj.checked = !itemObj.checked; toggleItem(itemObj);">
+      <label for="{{itemObj.item.id}}">{{itemObj.item.firstName}} {{itemObj.item.secondName}}</label>
+    </div>
+  </div>
+</div>

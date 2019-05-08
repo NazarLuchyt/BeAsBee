@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
-import { defaultImg } from 'src/app/_constants/defaults.const';
-import { UserPage } from 'src/app/_models/user-page.model';
 import { Chat } from 'src/app/_models/chat.model';
 import { MessageCreate } from 'src/app/_models/message-create.model';
 import { ChatService } from 'src/app/_services/chat.service';
 import { Message } from 'src/app/_models/message.model';
-import { MessageStoreService } from 'src/app/_services/message.store.service';
 import { Subscription } from 'rxjs';
+import { ChatConfigService } from 'src/app/_services/chat-config.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,22 +20,21 @@ export class ChatComponent implements OnInit {
   messages: Message[];
 
   storeSubscription: Subscription;
-  messageStore: MessageStoreService;
+  chatConfig: ChatConfigService;
 
   chatId: string;
   inputMessage: string;
   currentChat: Chat;
+  isDisabledChat = false;
 
   @ViewChild('endList') private endList: ElementRef;
-  @ViewChild('input_field') private inputField: ElementRef;
-
   constructor(private chatService: ChatService) { }
 
   ngOnInit() {
-    this.chatService.currentMessageStore.subscribe(msgStore => {
-      if (msgStore) {
-        this.messageStore = msgStore;
-        this.changeMessageStore(msgStore);
+    this.chatService.currentChatConfigService.subscribe(cfgService => {
+      if (cfgService) {
+        this.chatConfig = cfgService;
+        this.changeChatConfigService(cfgService);
         this.scrollToBottom();
       }
     });
@@ -47,12 +44,13 @@ export class ChatComponent implements OnInit {
     return this.colorArray.find(p => p[0] === userId)[1];
   }
 
-  changeMessageStore(msgStore: MessageStoreService) {
+  changeChatConfigService(cfgService: ChatConfigService) {
     if (this.storeSubscription) {
       this.storeSubscription.unsubscribe();
     }
-    this.storeSubscription = msgStore.store.subscribe(messages => {
+    this.storeSubscription = cfgService.messageStore.subscribe(messages => {
       this.messages = messages;
+      this.isDisabledChat = cfgService.isChatBlocked;
     });
   }
 
@@ -62,13 +60,13 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  public createMessage(event: Event): void {
+  createMessage(event: Event): void {
     if (this.inputMessage) {
       const newMessage = new MessageCreate(
-        this.messageStore.chat.id,
+        this.chatConfig.chat.id,
         new Date(),
         this.inputMessage);
-      this.messageStore.newMessage.next(newMessage);
+      this.chatConfig.newMessage.next(newMessage);
       this.inputMessage = null;
     }
     event.preventDefault();

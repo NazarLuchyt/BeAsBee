@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.services';
 import { Message } from '../_models/message.model';
 import { MessageCreate } from '../_models/message-create.model';
-import { BehaviorSubject } from 'rxjs';
-import { MessageStoreService } from './message.store.service';
 
 @Injectable({
   providedIn: 'root'

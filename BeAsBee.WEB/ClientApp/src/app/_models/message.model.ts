@@ -6,7 +6,7 @@ export class Message {
     userName: string;
     userId: string;
 
-    constructor(id: string, chatId: string, receivedTime: Date, messageText: string, userId: string, userName: string) {
+    constructor(id: string, messageText: string, chatId?: string, receivedTime?: Date,  userId?: string, userName?: string) {
         this.id = id;
         this.chatId = chatId;
         this.receivedTime = receivedTime;

@@ -7,6 +7,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using BeAsBee.API.Filters;
+using BeAsBee.API.Helpers;
 using BeAsBee.API.Hubs;
 using BeAsBee.Domain.Common;
 using BeAsBee.Domain.Interfaces.Services;
@@ -26,6 +27,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using ConnectionMapping = BeAsBee.API.Helpers.ConnectionMapping;
 
 namespace BeAsBee.API {
     public class Startup {
@@ -134,7 +136,9 @@ namespace BeAsBee.API {
             services.AddAutofac();
             services.AddAutoMapper( cfg => cfg.AddExpressionMapping() );
             services.AddDbContext<ApplicationContext>( options => options.UseSqlServer( Configuration.GetConnectionString( "DefaultConnection" ) ) );
+
             services.AddSignalR();
+            services.AddSingleton<IConnectionMapping, ConnectionMapping>();
             return new AutofacServiceProvider( ContainerManager.BuildContainer( services ) );
         }
 

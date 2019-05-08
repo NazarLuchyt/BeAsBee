@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BeAsBee.API.Areas.v1.Common;
@@ -8,6 +8,7 @@ using BeAsBee.API.Areas.v1.Models.Common;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
 using BeAsBee.Domain.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeAsBee.API.Areas.v1.Controllers {
@@ -29,7 +30,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         [Route( "{id}" )]
         public async Task<IActionResult> GetById ( Guid id ) {
             var result = await _chatService.GetByIdAsync( id );
-            var viewModel = _mapper.Map<ChatViewModel>( result );
+            var viewModel = Mapper.Map<ChatViewModel>( result );
             return Ok( viewModel );
         }
 
@@ -49,7 +50,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
 
             var result = await _chatService.GetPagedAsync( userId, countMessage, count, page );
 
-            var viewModels = _mapper.Map<PageResultViewModel<ChatViewModel>>( result );
+            var viewModels = Mapper.Map<PageResultViewModel<ChatViewModel>>( result );
             return Ok( viewModels );
         }
 
@@ -64,7 +65,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
                 return BadRequest( ModelState );
             }
 
-            var modelEntity = _mapper.Map<ChatEntity>( model );
+            var modelEntity = Mapper.Map<ChatEntity>( model );
             modelEntity.UserId = Guid.Parse( HttpContext.User.Identity.Name );
             var currentUserFromIdentity = new UserEntity {
                 Id = Guid.Parse( HttpContext.User.Identity.Name )
@@ -79,7 +80,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
             // TODO chage way to get with User chat
             result.Value.UserChats = modelEntity.UserChats;
 
-            var viewModel = _mapper.Map<ChatViewModel>( result.Value );
+            var viewModel = Mapper.Map<ChatViewModel>( result.Value );
             return Ok( viewModel );
         }
 
@@ -95,7 +96,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         //        return BadRequest(ModelState);
         //    }
 
-        //    var modelEntity = _mapper.Map<ChatEntity>(model);
+        //    var modelEntity = Mapper.Map<ChatEntity>(model);
         //    var result = await  _messageService.UpdateAsync(id, modelEntity);
         //    if ( !result.IsSuccess ) {
         //        throw result.Exception;
@@ -103,6 +104,25 @@ namespace BeAsBee.API.Areas.v1.Controllers {
 
         //    return Ok();
         //}
+
+        /// <summary>
+        ///     Add new users to chat DB.
+        /// </summary>
+        /// <remarks>This route will add users to chat.</remarks>
+        /// <param name="chatId">Chat's Id to to add users to it.</param>
+        /// <param name="newUserGuids">Guid array of new user to add.</param>
+        [HttpPost]
+        [Route( "addUsers/{chatId}" )]
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AddUsers ( Guid chatId, [FromBody] List<Guid> newUserGuids ) {
+            var result = await _chatService.AddUsersAsync( chatId, newUserGuids );
+            if ( !result.IsSuccess ) {
+                throw result.Exception;
+            }
+
+            return Ok();
+        }
 
         /// <summary>
         ///     Delete case study entity by Id.

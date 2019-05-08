@@ -1,21 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { ApiService } from './api.services';
 import { Chat } from '../_models/chat.model';
 import { Page } from '../_models/page.model';
 import { HttpParam } from '../_models/http-param.model';
 import { BehaviorSubject } from 'rxjs';
-import { MessageStoreService } from './message.store.service';
 import { ChatCreate } from '../_models/chat-create.model';
+import { User } from '../_models/user.model';
+import { ChatConfigService } from './chat-config.service';
 
 @Injectable()
 export class ChatService {
 
-  currentMessageStore: BehaviorSubject<MessageStoreService> = new BehaviorSubject<MessageStoreService>(null);
+  currentChatConfigService: BehaviorSubject<ChatConfigService> = new BehaviorSubject<ChatConfigService>(null);
 
   constructor(private service: ApiService) { }
 
-  changeCurrentMessageStore(storeInstance: MessageStoreService) {
-    this.currentMessageStore.next(storeInstance);
+  changeChatConfigService(configInstance: ChatConfigService) {
+    this.currentChatConfigService.next(configInstance);
   }
 
   public getAll() {
@@ -41,6 +42,10 @@ export class ChatService {
 
   public update(user: Chat) {
     return this.service.put<Chat>('api/v1/chats', user);
+  }
+
+  public addUsers(chatId: string, userGuids: string[]) {
+    return this.service.post<string[]>('api/v1/chats/addUsers/' + chatId, userGuids);
   }
 
   public delete(id: string) {
