@@ -35,6 +35,7 @@ export class UserService {
     }
   }
 
+
   public register(user: User) {
     return this.service.post<User>('api/v1/users/register', user);
   }

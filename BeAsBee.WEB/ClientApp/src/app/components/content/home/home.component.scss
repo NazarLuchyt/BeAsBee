@@ -1,19 +1,33 @@
-.main-container {
-    margin: 10px;
-}
+app-home:host  { 
 
-.inbox_people {
-    background: #f8f8f8 none repeat scroll 0 0;
-    float: left;
-    overflow: hidden;
-    width: 35%;
-    border-right: 1px solid #c4c4c4;
-}
+    .inbox_people {
+        height: 100%;
+        background: #f8f8f8 none repeat scroll 0 0;
+        float: left;
+        width: 35%;
+        border-right: 1px solid #c4c4c4;
+    }
 
-.clear {
-    display: flex;
-}
+    .message-box {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
 
-.clear-button {
-    margin: auto;
+    .clear {
+        display: flex;
+    }
+
+    .clear-button {
+        margin: auto;
+    }
+
+    .main-content {       
+        border: 1px solid #c4c4c4;
+        clear: both;
+        height: 100%;
+    }
+
+    .inbox-chat {
+        overflow-y: auto;
+    }
 }

@@ -1,14 +1,13 @@
-<div class="main-container">
-  <div class="messaging">
-    <div class="inbox_msg">
-      <div class="inbox_people">
+
+    <div class="main-content">
+      <div class="inbox_people d-flex flex-column">
         <div class="headind_srch">
           <div class="recent_heading">
             <h4>{{currentUser.firstName}} {{currentUser.secondName}}</h4>
           </div>
           <app-search (inputtedText)="searchUser($event)"></app-search>
         </div>
-        <div class="inbox_chat">
+        <div class="inbox-chat">
           <div [hidden]="!isSearch">
             <div class="clear input-group-addon">
               <button class="clear-button" (click)="clearSearch()" type="button">Clear search result<i
@@ -27,18 +26,16 @@
           </div>
 
         </div>
-      </div>
-
-      <!-- {{currentUser?.messages?.lenght}} -->
+      </div>     
       <div *ngIf="!currentChatId; else message_box">
         <h1>
           Please Select Chat to start chating
         </h1>
       </div>
       <ng-template #message_box>
+        <div class="d-flex flex-column" style="height: 100%">
         <app-chat-setting [chatId]="currentChatId"></app-chat-setting>
-        <app-chat></app-chat>
+        <app-chat class="message-box"></app-chat>
+      </div>
       </ng-template>
-    </div>
-  </div>
-</div>
+    </div> 
