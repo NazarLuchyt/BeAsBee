@@ -1,23 +1,33 @@
 .setting-container {
     float: left;
     padding: 0px 5px 0 25px;
-    width: 100%;    
+    width: 100%;
     border-bottom: 1px solid #c4c4c4;
+
+    .text-style {
+        color: #707070;
+        font-size: 18px;
+    }
+
+    .setting-group {
+        border-right: 1px solid #c4c4c4;
+        padding-right: 5px;
+        color: #707070;
+        font-size: 18px;
+        cursor: default;
+
+        .setting-button {
+            margin: 0px 5px 0px 5px;
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+            padding: 0;
+            cursor: pointer;
+        }
+    }
 }
 
-.setting-group {
-    border-right: 1px solid #c4c4c4;
-}
-
-.setting-group button {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;  
-    border: medium none;
-    padding: 0;
-    color: #707070;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.setting-button {  
-    margin: 0px 5px 0px 5px;
+.chat-name {
+    border: none;
+    min-width: 25px;
+    max-width: 250px;
 }

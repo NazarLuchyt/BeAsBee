@@ -48,7 +48,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
                 throw new ArgumentException( Translations.COUNT_CANNOT_BE_NULL );
             }
 
-            var result = await _chatService.GetPagedAsync( userId, countMessage, count, page );
+            var result = await _chatService.GetPagedAsync( userId, countMessage, page, count );
 
             var viewModels = Mapper.Map<PageResultViewModel<ChatViewModel>>( result );
             return Ok( viewModels );

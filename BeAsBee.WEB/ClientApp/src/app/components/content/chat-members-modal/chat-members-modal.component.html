@@ -1,11 +1,16 @@
 <app-search (inputtedText)="searchUser($event)">
 </app-search>
-
-<app-select [(items)]="chatMembers">
-</app-select>
-
 <div class="cancel">
-  <a (click)="close()">{{'ADMIN.TEXT_CLOSE' | translate}}</a>
+  <i class="far fa-times-circle" (click)="close()"></i>
 </div>
+<div class="d-flex flex-column">
+  <app-select [(items)]="usedMembers">
+  </app-select>
 
-<button (click)="applyChanges()">{{buttonLabel | translate}}</button>
+  <div class="control-group">
+    <div class="apply">
+      <button class="setting-button text-style" type="button"
+        (click)="applyChanges()">{{buttonLabel | translate}}</button>
+    </div>
+  </div>
+</div>

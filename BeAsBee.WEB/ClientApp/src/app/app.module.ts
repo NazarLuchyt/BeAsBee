@@ -21,21 +21,26 @@ import { ChatPreviewComponent } from './components/content/chat-preview/chat-pre
 import { RegistrationComponent } from './components/authorization/registration/registration.component';
 import { UserPreviewComponent } from './components/content/user-preview/user-preview.component';
 import { ChatMembersModalComponent } from './components/content/chat-members-modal/chat-members-modal.component';
+import { SearchComponent } from './components/common/search/search.component';
+import { SelectComponent } from './components/common/select/select.component';
+import { MessageComponent } from './components/content/message/message.component';
+import { ChatSettingComponent } from './components/content/chat-setting/chat-setting.component';
 
 import { AuthGuard } from './_guard/auth.guard';
 import { routing } from './app.routing';
 
+import { ModalModule } from 'ngx-bootstrap';
+
+import { JwtInterceptor } from './_services/jwt.interceptor';
+
+import { InputDynamicWidthDirective } from './_directives/input-dynamic-width.directive';
+
 // Services
 import { ApiService } from './_services/api.services';
 import { AuthenticationService } from './_services/authentication.service';
-import { JwtInterceptor } from './_services/jwt.interceptor';
 import { ChatService } from './_services/chat.service';
-import { MessageComponent } from './components/content/message/message.component';
-import { ChatSettingComponent } from './components/content/chat-setting/chat-setting.component';
-import { ModalModule } from 'ngx-bootstrap';
-import { SearchComponent } from './components/common/search/search.component';
-import { SelectComponent } from './components/common/select/select.component';
 import { ChatConfigService } from './_services/chat-config.service';
+
 
 @NgModule({
   declarations: [
@@ -53,7 +58,8 @@ import { ChatConfigService } from './_services/chat-config.service';
     ChatSettingComponent,
     ChatMembersModalComponent,
     SearchComponent,
-    SelectComponent
+    SelectComponent,
+    InputDynamicWidthDirective
   ],
   entryComponents: [
     ChatMembersModalComponent

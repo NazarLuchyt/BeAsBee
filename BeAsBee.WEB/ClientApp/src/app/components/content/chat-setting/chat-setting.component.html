@@ -1,12 +1,20 @@
 <div class="setting-container">
+  <span class="setting-group text-style">
+    {{'LABEL.CHAT.NAME' | translate}}
+    <input #chatName class="chat-name" type="text" [(ngModel)]="currentChatName" appInputDynamicWidth />
+  </span>
+  <span class="setting-group text-style">
+    {{'LABEL.CHAT.MEMBERS' | translate}} <span> {{currentChatMembersLength}}</span>
+  </span>
+
   <span class="setting-group">
-    <button class="setting-button" type="button"
+    <button class="setting-button text-style" type="button"
       (click)="showSettingModal(settingType.Add)">{{'LABEL.CHAT.ADD_NEW_USER' | translate}}<i class="fa fa-plus"
         aria-hidden="true"></i>
     </button>
   </span>
   <span class="setting-group">
-    <button class="setting-button" type="button"
+    <button class="setting-button text-style" type="button"
       (click)="showSettingModal(settingType.Remove)">{{'LABEL.CHAT.REMOVE_USER' | translate}}<i class="fa fa-minus"
         aria-hidden="true"></i>
     </button>

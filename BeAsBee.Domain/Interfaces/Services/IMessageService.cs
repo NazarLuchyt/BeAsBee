@@ -6,7 +6,7 @@ using BeAsBee.Domain.Entities;
 
 namespace BeAsBee.Domain.Interfaces.Services {
     public interface IMessageService {
-        Task<PageResult<MessageEntity>> GetPagedAsync ( int page, int count );
+        Task<PageResult<MessageEntity>> GetPagedAsync ( Guid chatId, int count, int page );
         Task<MessageEntity> GetByIdAsync ( Guid id );
         Task<List<MessageEntity>> GetByChatId ( Guid id );
         Task<OperationResult<MessageEntity>> CreateAsync ( MessageEntity entity );

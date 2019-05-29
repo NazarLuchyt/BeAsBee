@@ -9,6 +9,8 @@
         "CHAT": {
             "ADD_NEW_USER": "Add new users ",
             "REMOVE_USER": "Remove users ",
+            "NAME": "Chat name: ",
+            "MEMBERS": "Members: ",
             "CHAT_SETTING": {
                 "ADD": "Add",
                 "REMOVE": "Remove"

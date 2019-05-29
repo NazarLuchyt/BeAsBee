@@ -1,0 +1,27 @@
+@import "../../../../assets/styles/variable.scss";
+
+.cancel {
+    position: absolute;
+    color: $base-color-control-button;
+    top: 0px;
+    right: 0px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.apply {
+    color: $base-color-control-button;
+    bottom: 0px;
+    right: 0px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.control-group {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+        margin: 0px 5px 0px 5px;
+    }
+}

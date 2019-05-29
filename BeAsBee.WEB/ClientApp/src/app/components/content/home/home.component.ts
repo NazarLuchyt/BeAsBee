@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.currentUser.firstName = localStorageObject.userFirstName;
     this.currentUser.secondName = localStorageObject.userSecondName;
     this.currentUser.id = id;
-    this.chatService.getPage(id, 10, 0, 10).subscribe((result) => {
+    this.chatService.getPage(id, 3, 0, 10).subscribe((result) => {
       this.currentUser.userChats = setNameForChats(result.items, this.currentUser.id);
     });
   }

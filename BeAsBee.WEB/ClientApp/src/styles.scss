@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import './assets/styles/controls.scss';
+
+.scrollbar {
+    @extend %custom-scrollbar;
+}
 
 .main {
     text-align: left;

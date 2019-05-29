@@ -28,8 +28,8 @@ namespace BeAsBee.Domain.Services {
             }
         }
 
-        public async Task<PageResult<MessageEntity>> GetPagedAsync ( int count = 100, int page = 0 ) {
-            var listItems = await _unitOfWork.MessageRepository.GetPagedAsync( count, page );
+        public async Task<PageResult<MessageEntity>> GetPagedAsync ( Guid chatId, int count = 100, int page = 0 ) {
+            var listItems = await _unitOfWork.MessageRepository.GetPagedAsync( count, page , msg => msg.ChatId== chatId );
             var countItems = await _unitOfWork.MessageRepository.CountAsync();
             return new PageResult<MessageEntity> {Items = new List<MessageEntity>( listItems ), Count = countItems, PageNumber = page};
         }

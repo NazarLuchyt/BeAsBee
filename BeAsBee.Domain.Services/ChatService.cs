@@ -30,7 +30,7 @@ namespace BeAsBee.Domain.Services {
             }
         }
 
-        public async Task<PageResult<ChatEntity>> GetPagedAsync ( Guid userId, int countMessage, int count = 100, int page = 0 ) {
+        public async Task<PageResult<ChatEntity>> GetPagedAsync ( Guid userId, int countMessage, int page = 0, int count = 100 ) {
             var listItems = await _unitOfWork.ChatRepository.GetPagedAsync( userId, count, page );
             foreach ( var chat in listItems ) {
                 chat.Messages = await _unitOfWork.MessageRepository.GetPagedAsync( countMessage, 0, m => m.ChatId == chat.Id );

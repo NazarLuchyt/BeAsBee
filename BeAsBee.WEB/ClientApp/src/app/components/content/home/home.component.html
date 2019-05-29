@@ -7,7 +7,7 @@
           </div>
           <app-search (inputtedText)="searchUser($event)"></app-search>
         </div>
-        <div class="inbox-chat">
+        <div class="chat-list scrollbar">
           <div [hidden]="!isSearch">
             <div class="clear input-group-addon">
               <button class="clear-button" (click)="clearSearch()" type="button">Clear search result<i

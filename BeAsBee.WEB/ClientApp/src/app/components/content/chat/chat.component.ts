@@ -6,6 +6,7 @@ import { ChatService } from 'src/app/_services/chat.service';
 import { Message } from 'src/app/_models/message.model';
 import { Subscription } from 'rxjs';
 import { ChatConfigService } from 'src/app/_services/chat-config.service';
+import { MessageService } from 'src/app/_services/message.service';
 
 @Component({
   selector: 'app-chat',
@@ -22,18 +23,18 @@ export class ChatComponent implements OnInit {
   storeSubscription: Subscription;
   chatConfig: ChatConfigService;
 
-  chatId: string;
+  currentChatId: string;
   inputMessage: string;
-  currentChat: Chat;
   isDisabledChat = false;
 
   @ViewChild('endList') private endList: ElementRef;
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private msgService: MessageService) { }
 
   ngOnInit() {
     this.chatService.currentChatConfigService.subscribe(cfgService => {
       if (cfgService) {
         this.chatConfig = cfgService;
+        this.currentChatId = cfgService.chat.id;
         this.changeChatConfigService(cfgService);
         this.scrollToBottom();
       }
@@ -70,5 +71,13 @@ export class ChatComponent implements OnInit {
       this.inputMessage = null;
     }
     event.preventDefault();
+  }
+
+  load() {
+    this.msgService.getPage(this.currentChatId, 1, 3).subscribe((pageResult) => {
+      const newMsg = pageResult.items;
+      newMsg.push(...this.messages);
+      this.chatConfig.changeMessageStore(newMsg);
+    });
   }
 }

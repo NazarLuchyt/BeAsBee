@@ -8,7 +8,6 @@ using BeAsBee.API.Areas.v1.Models.Message;
 using BeAsBee.Domain.Entities;
 using BeAsBee.Domain.Interfaces.Services;
 using BeAsBee.Domain.Resources;
-using BeAsBee.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeAsBee.API.Areas.v1.Controllers {
@@ -18,7 +17,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         private readonly IMessageService _messageService;
 
         public MessagesController ( IMessageService caseStudyService, IMapper mapper ) : base( mapper ) {
-             _messageService = caseStudyService;
+            _messageService = caseStudyService;
         }
 
         /// <summary>
@@ -27,11 +26,11 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         /// <remarks>This route will get entity.</remarks>
         /// <param name="id">Case study`s id.</param>
         [HttpGet]
-        [Route("{id}")]
+        [Route( "{id}" )]
         public async Task<IActionResult> GetByChat ( Guid id ) {
-            var result = await _messageService.GetByChatId(id);
-            var viewModel = Mapper.Map<List<MessageViewModel>>(result);
-            return Ok(viewModel);
+            var result = await _messageService.GetByChatId( id );
+            var viewModel = Mapper.Map<List<MessageViewModel>>( result );
+            return Ok( viewModel );
         }
 
         ///// <summary>
@@ -51,15 +50,16 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         ///     Get page with case studies by number of case studies at one page.
         /// </summary>
         /// <remarks>This route will get entities.</remarks>
+        /// <param name="chatId">Chat Guid.</param>
         /// <param name="count">Number of items per page.</param>
         /// <param name="page">Number of page.</param>
         [HttpGet]
-        public async Task<IActionResult> GetPage ( int count, int page ) {
+        public async Task<IActionResult> GetPage ( [FromQuery] Guid chatId, int count, int page ) {
             if ( count == 0 ) {
                 throw new ArgumentException( Translations.COUNT_CANNOT_BE_NULL );
             }
 
-            var result = await  _messageService.GetPagedAsync( count, page );
+            var result = await _messageService.GetPagedAsync( chatId, count, page );
             var viewModels = Mapper.Map<PageResultViewModel<MessageViewModel>>( result );
             return Ok( viewModels );
         }
@@ -72,17 +72,17 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         [HttpPost]
         public async Task<IActionResult> Create ( [FromBody] CreateMessageBindingModel model ) {
             if ( !ModelState.IsValid ) {
-                return BadRequest(ModelState);
+                return BadRequest( ModelState );
             }
 
-            var modelEntity = Mapper.Map<MessageEntity>(model);
-            var result = await _messageService.CreateAsync(modelEntity);
+            var modelEntity = Mapper.Map<MessageEntity>( model );
+            var result = await _messageService.CreateAsync( modelEntity );
             if ( !result.IsSuccess ) {
                 throw result.Exception;
             }
 
-            var viewModel = Mapper.Map<MessageViewModel>(result.Value);
-            return Ok(viewModel);
+            var viewModel = Mapper.Map<MessageViewModel>( result.Value );
+            return Ok( viewModel );
         }
 
         ///// <summary>
@@ -113,7 +113,7 @@ namespace BeAsBee.API.Areas.v1.Controllers {
         /// <param name="id">Case Study`s id.</param>
         [HttpDelete]
         public async Task<IActionResult> Delete ( Guid id ) {
-            var result = await  _messageService.DeleteAsync( id );
+            var result = await _messageService.DeleteAsync( id );
             if ( !result.IsSuccess ) {
                 throw result.Exception;
             }

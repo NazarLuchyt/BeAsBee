@@ -8,6 +8,7 @@ import { ChatService } from 'src/app/_services/chat.service';
 import { ChatSettingTypeEnum } from 'src/app/_models/enums/chat-setting-type.enum';
 import { settingTypeButtonLable } from 'src/app/_constants/defaults.const';
 import { UserPage } from 'src/app/_models/user-page.model';
+import { Chat } from 'src/app/_models/chat.model';
 
 @Component({
   selector: 'app-chat-members-modal',
@@ -19,9 +20,10 @@ export class ChatMembersModalComponent implements OnInit {
   @Input() chatId: string;
   @Input() settingType: ChatSettingTypeEnum;
   @Output() OnClose: Subject<boolean> = new Subject();
-  chatMembers: SelectItem[];
+  usedMembers: SelectItem[];
   buttonLabel: string;
   public modalRef: BsModalRef;
+  currentChat: Chat;
 
   constructor(public bsModalRef: BsModalRef, private userService: UserService, private chatService: ChatService) {
     this.modalRef = bsModalRef;
@@ -29,12 +31,18 @@ export class ChatMembersModalComponent implements OnInit {
 
   ngOnInit() {
     this.buttonLabel = settingTypeButtonLable[this.settingType];
-    if (this.settingType === ChatSettingTypeEnum.Remove) {
-      this.chatMembers = this.chatService.currentChatConfigService.value.chat.userChats.map((item) => ({
-        item: item,
-        checked: false
-      }));
-    }
+
+    this.chatService.currentChatConfigService.subscribe(chatCfg => {
+      this.currentChat = chatCfg.chat;
+      if (this.settingType === ChatSettingTypeEnum.Remove) {
+        this.usedMembers = this.currentChat.userChats.map((item) => ({
+          item: item,
+          checked: false
+        }));
+      }
+    });
+
+
   }
 
   close() {
@@ -45,29 +53,27 @@ export class ChatMembersModalComponent implements OnInit {
   applyChanges() {
     switch (this.settingType) {
       case ChatSettingTypeEnum.Add: {
-        const newUsers = this.chatMembers.filter((item) => item.checked).map(sItem => sItem.item as UserPage);
+        const newUsers = this.usedMembers.filter((item) => item.checked).map(sItem => sItem.item as UserPage);
         this.chatService.currentChatConfigService.value.addNewUsers.emit(newUsers);
         break;
       }
       case ChatSettingTypeEnum.Remove: {
-        const userToRemove = this.chatMembers.filter((item) => item.checked).map(sItem => (sItem.item as User).id);
+        const userToRemove = this.usedMembers.filter((item) => item.checked).map(sItem => (sItem.item as User).id);
         this.chatService.currentChatConfigService.value.removeUsers.emit(userToRemove);
         break;
       }
     }
-    // debugger
-    // this.chatService.addUsers(this.chatId, newUserGuids).subscribe(result => {
-    //   const test = result;
-    //   debugger
-    // });
   }
 
   searchUser(infoToSearch: string) {
     switch (this.settingType) {
       case ChatSettingTypeEnum.Add: {
-        this.userService.getPage(10, 0, infoToSearch).subscribe(
+        this.userService.getPage(25, 0, infoToSearch).subscribe(
           result => {
-            this.chatMembers = result.items.map((item) => ({
+            const difference = result.items.filter(
+              findedResult => !this.currentChat.userChats.some(item => item['id'] === findedResult.id)
+            );
+            this.usedMembers = difference.map((item) => ({
               item: item,
               checked: false
             }));
@@ -76,10 +82,7 @@ export class ChatMembersModalComponent implements OnInit {
         break;
       }
       case ChatSettingTypeEnum.Remove: {
-     //   const t = ('Павло' + ' ' + 'Дідик').includes(infoToSearch);
-
-
-        this.chatMembers = this.chatMembers.filter(cMember =>
+        this.usedMembers = this.usedMembers.filter(cMember =>
           ((cMember.item as UserPage).firstName + ' ' + (cMember.item as UserPage).secondName).includes(infoToSearch));
         break;
       }
