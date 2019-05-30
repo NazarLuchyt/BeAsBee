@@ -4,7 +4,7 @@
       <div *ngIf="!messages?.length">
         <h1>clear chat</h1>
       </div>
-      <button (click)="load()"> Load 3</button>
+      <!-- <button (click)="load()"> Load 3</button> -->
       <ng-container *ngIf="messages?.length">
         <ng-container *ngFor="let message of messages">
           <app-message [message]="message">

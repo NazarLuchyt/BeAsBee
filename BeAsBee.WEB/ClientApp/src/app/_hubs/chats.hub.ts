@@ -87,4 +87,13 @@ export class ChatHub extends BaseHub {
   removeUsers(chatId: string, removeUsersGuid: string[]) {
     return from(this.hubConnection.invoke('RemoveUsersFromChat', chatId, removeUsersGuid));
   }
+
+  onToggleEncrypting(fn: (status: boolean) => void) {
+    this.hubConnection.on('OnToggleEncrypting', fn);
+  }
+
+  changeEncryptStatus(chatId: string, status: boolean) {
+    return from(this.hubConnection.invoke('ToggleEncrypting', chatId, status));
+  }
+
 }

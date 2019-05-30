@@ -16,9 +16,9 @@ namespace BeAsBee.API.Hubs {
     public class ChatHub : Hub {
         private readonly IChatService _chatService;
         private readonly IConnectionMapping _connectionMapping;
-        private readonly IMapper Mapper;
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
+        private readonly IMapper Mapper;
 
         public ChatHub ( IMessageService messageService, IMapper mapper, IUserService userService, IChatService chatService, IConnectionMapping connectionMapping ) {
             _messageService = messageService;
@@ -96,6 +96,10 @@ namespace BeAsBee.API.Hubs {
             _connectionMapping.AddUserToChat( chatId, Context.ConnectionId, Context.UserIdentifier );
             // _connections.Add( chatId, Context.ConnectionId );
             await Groups.AddToGroupAsync( Context.ConnectionId, chatId );
+        }
+
+        public async Task ToggleEncrypting ( Guid chatId, bool status = false ) {
+            await Clients.Group( chatId.ToString() ).SendAsync( "OnToggleEncrypting", status );
         }
     }
 }

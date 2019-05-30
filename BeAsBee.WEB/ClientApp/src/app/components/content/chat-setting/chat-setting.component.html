@@ -19,4 +19,8 @@
         aria-hidden="true"></i>
     </button>
   </span>
+  <span class="setting-group">
+    <input [(ngModel)]="isEncryptActivated" (change)="toggelEcrypt()" id="encrypt" type="checkbox">
+    <label for="encrypt">{{'LABEL.CHAT.ENCRYPT' | translate}}</label>
+  </span>
 </div>

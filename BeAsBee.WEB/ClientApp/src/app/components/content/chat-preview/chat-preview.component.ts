@@ -7,6 +7,7 @@ import { ChatService } from 'src/app/_services/chat.service';
 import { ChatConfigService } from 'src/app/_services/chat-config.service';
 import { UserPage } from 'src/app/_models/user-page.model';
 import { ChatSettingTypeEnum } from 'src/app/_models/enums/chat-setting-type.enum';
+import { encryptMessage } from 'src/app/_helpers/encrypt.helper';
 
 @Component({
   selector: 'app-chat-preview',
@@ -48,6 +49,12 @@ export class ChatPreviewComponent implements OnInit, OnDestroy {
         error => { }
       );
     });
+
+    this.chatConfig.onChangeEncrytpStatus.subscribe((status) => {
+      if (this.chatItem) {
+        this.chatHub.changeEncryptStatus(this.chatItem.id, status);
+      }
+    });
   }
 
   ngOnInit() {
@@ -72,7 +79,11 @@ export class ChatPreviewComponent implements OnInit, OnDestroy {
   onHubConnected() {
     this.chatHub.onSend((connectionId: string, message: Message) => {
       const newMessageArray = this.chatConfig.messageStore.value;
-      newMessageArray.push(message);
+      const newMsg = message;
+      if (this.chatConfig.encryptStatus.value) {
+        newMsg.messageText = encryptMessage(newMsg.messageText, -5);
+      }
+      newMessageArray.push(newMsg);
       this.chatConfig.messageStore.next(newMessageArray);
       this.pushMessage.next();
     });
@@ -82,6 +93,10 @@ export class ChatPreviewComponent implements OnInit, OnDestroy {
       this.chatHub.createNewChat(this.chatItem.id);
       this.isNewChat = false;
     }
+
+    this.chatHub.onToggleEncrypting((status) => {
+      this.chatConfig.changeEncryptStatus(status);
+    });
 
     this.chatHub.onRemoveUsers((chat: Chat, message: string) => {
       const notificationMessage = new Message('-1', message);

@@ -11,6 +11,7 @@
             "REMOVE_USER": "Remove users ",
             "NAME": "Chat name: ",
             "MEMBERS": "Members: ",
+            "ENCRYPT": "Encrypt status",
             "CHAT_SETTING": {
                 "ADD": "Add",
                 "REMOVE": "Remove"

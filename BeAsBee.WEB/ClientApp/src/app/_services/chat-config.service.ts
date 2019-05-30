@@ -11,15 +11,23 @@ export class ChatConfigService {
 
     chat = new Chat();
     isChatBlocked = false;
+    // isEncryptActivated = false;
     messageStore: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>(null);
+    encryptStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     newMessage: EventEmitter<MessageCreate> = new EventEmitter<MessageCreate>();
     addNewUsers: EventEmitter<UserPage[]> = new EventEmitter<UserPage[]>();
     removeUsers: EventEmitter<string[]> = new EventEmitter<string[]>();
+    onChangeEncrytpStatus: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private messageService: MessageService) { }
 
     changeMessageStore(messages: Message[]) {
         this.messageStore.next(messages);
+    }
+
+    changeEncryptStatus(status: boolean) {
+        this.encryptStatus.next(status);
     }
 
     // createNewMessage(message: MessageCreate) {

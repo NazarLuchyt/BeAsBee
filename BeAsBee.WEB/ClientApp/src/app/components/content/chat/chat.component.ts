@@ -7,6 +7,7 @@ import { Message } from 'src/app/_models/message.model';
 import { Subscription } from 'rxjs';
 import { ChatConfigService } from 'src/app/_services/chat-config.service';
 import { MessageService } from 'src/app/_services/message.service';
+import { encryptMessage } from 'src/app/_helpers/encrypt.helper';
 
 @Component({
   selector: 'app-chat',
@@ -61,16 +62,22 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  createMessage(event: Event): void {
+  createMessage(event?: Event): void {
+    event.preventDefault();
     if (this.inputMessage) {
+      let textMessage = '';
+      debugger
+      if (this.chatConfig.encryptStatus.value) {
+        textMessage = encryptMessage(this.inputMessage, 5);
+      }
+
       const newMessage = new MessageCreate(
         this.chatConfig.chat.id,
         new Date(),
-        this.inputMessage);
+        textMessage.length > 0 ? textMessage : this.inputMessage);
       this.chatConfig.newMessage.next(newMessage);
       this.inputMessage = null;
     }
-    event.preventDefault();
   }
 
   load() {

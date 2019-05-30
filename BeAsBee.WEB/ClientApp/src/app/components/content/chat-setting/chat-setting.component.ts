@@ -3,6 +3,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { ChatMembersModalComponent } from '../chat-members-modal/chat-members-modal.component';
 import { ChatSettingTypeEnum } from 'src/app/_models/enums/chat-setting-type.enum';
 import { ChatService } from 'src/app/_services/chat.service';
+import { ChatConfigService } from 'src/app/_services/chat-config.service';
 
 @Component({
   selector: 'app-chat-setting',
@@ -17,6 +18,8 @@ export class ChatSettingComponent implements OnInit {
   settingType = ChatSettingTypeEnum;
   currentChatName: string;
   currentChatMembersLength: number;
+  chatConfigService: ChatConfigService;
+  isEncryptActivated: boolean;
 
 
   messageModal: BsModalRef;
@@ -26,9 +29,15 @@ export class ChatSettingComponent implements OnInit {
 
   ngOnInit() {
     this.chatService.currentChatConfigService.subscribe(chatCfg => {
+      this.chatConfigService = chatCfg;
       this.currentChatName = chatCfg.chat.name;
       this.currentChatMembersLength = chatCfg.chat.userChats.length;
+      this.chatConfigService.encryptStatus.subscribe(status => {
+        this.isEncryptActivated = status;
+      });
     });
+
+
   }
 
   showSettingModal(settingType: ChatSettingTypeEnum) {
@@ -44,7 +53,10 @@ export class ChatSettingComponent implements OnInit {
     const element: HTMLInputElement = this.chatName.nativeElement;
     const newWidth = (+element.value.length + 8) + 'px';
     element.style.width = newWidth;
-    debugger
+  }
 
+  toggelEcrypt() {
+    // this.chatConfigService.isEncryptActivated = this.isEncryptActivated;
+    this.chatConfigService.onChangeEncrytpStatus.emit(this.isEncryptActivated);
   }
 }
